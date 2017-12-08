@@ -9,7 +9,7 @@ import fr.eni.aniforme.bo.Rdv;
 
 public class TableAgenda extends AbstractTableModel {
 	
-	private List<RdvAffichage> amis = new ArrayList<RdvAffichage>();
+	private List<RdvAffichage> rdvAffichage = new ArrayList<RdvAffichage>();
 	private final String[] entetes = {"Heure", "Nom du client", "Animal", "Race"};
 
 	@Override
@@ -19,7 +19,7 @@ public class TableAgenda extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return donnees.length;
+		return rdvAffichage.size();
 	}
 	
 	public String getColumnName(int columnIndex) {
@@ -28,7 +28,7 @@ public class TableAgenda extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		return donnees[rowIndex][columnIndex];
+		return null;
 	}
 	
 	public void addRdv(Rdv rdv)
