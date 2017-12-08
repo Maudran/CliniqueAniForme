@@ -1,17 +1,29 @@
 package fr.eni.aniforme.bll;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import fr.eni.aniforme.bo.Animal;
+import fr.eni.aniforme.bo.Client;
+import fr.eni.aniforme.bo.Personnel;
 import fr.eni.aniforme.bo.Rdv;
 import fr.eni.aniforme.dal.DALException;
 import fr.eni.aniforme.dal.DAO;
 import fr.eni.aniforme.dal.DAOFactory;
+import fr.eni.aniforme.dal.RDVDAOJdbcImpl;
+import fr.eni.aniforme.ihm.RdvAffichage;
 
 public class AgendaManager {
 
 	private static AgendaManager instance;
 	private DAO<Rdv> agendaDAO;
+	private DAO<Animal> animalDAO = DAOFactory.getAnimalDAO();
+	private DAO<Personnel> personnelDAO = DAOFactory.getPersonnelDAO();
+	private DAO<Client> clientDAO = DAOFactory.getClientDAO();
+	Calendar calendar = GregorianCalendar.getInstance();
 
 	private AgendaManager() {
 		agendaDAO = DAOFactory.getRDVDAO();
@@ -48,9 +60,8 @@ public class AgendaManager {
 			throw new BLLException("Erreur à la récupération de l'agenda d'un vétérinaire : " + nomVeto, e);
 		}
 	}
-	
-	public List<Rdv> getAgendaByDate(Date date) throws BLLException
-	{
+
+	public List<Rdv> getAgendaByDate(Date date) throws BLLException {
 		try {
 			return agendaDAO.selectByDate(date);
 		} catch (DALException e) {
@@ -58,37 +69,98 @@ public class AgendaManager {
 		}
 	}
 
+	public List<RdvAffichage> getRdvAffichageDate(Date date) throws BLLException
+	{
+		List<Rdv> agenda;
+		List<RdvAffichage> agendaAffichage = new ArrayList<RdvAffichage>();
+		try {
+			 agenda = agendaDAO.selectByDate(date);
+			 
+			 for (Rdv rdv : agenda) {
+				agendaAffichage.add(new RdvAffichage(heureDate(rdv), nomDuClient(rdv), nomAnimal(rdv), raceAnimal(rdv)));
+			}
+			 
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la récupération des rdv à afficher",e);
+		}
+		return agendaAffichage;
+	}
+
 	private void validerRdv(Rdv rdv) throws BLLException {
-		if (rdv.getNomVeterinaire() == null) {
-			throw new BLLException("Le nom du/de la vétérinaire est obligatoire");
-		}
+		try {
+			if (personnelDAO.selectById(rdv.getCodeVeterinaire()).getNom() == null
+					|| personnelDAO.selectById(rdv.getCodeVeterinaire()).getNom().isEmpty()) {
+				throw new BLLException("Le nom du/de la vétérinaire est obligatoire");
+			}
 
-		if (rdv.getDateRdv() == null) {
-			throw new BLLException("La date du rdv est obligatoire");
-		}
+			if (rdv.getDateRdv() == null) {
+				throw new BLLException("La date du rdv est obligatoire");
+			}
 
-		if (rdv.getNomAnimal() == null) {
-			throw new BLLException("Le nom de l'animal est obligatoire");
+			if (animalDAO.selectById(rdv.getCodeAnimal()).getNom() == null
+					|| animalDAO.selectById(rdv.getCodeAnimal()).getNom().isEmpty()) {
+				throw new BLLException("Le nom de l'animal est obligatoire");
+			}
+
+		} catch (DALException e) {
+			throw new BLLException("Erreur validation RDV", e);
 		}
 
 	}
-	
-	public boolean checkDispo(Rdv rdv) throws BLLException
-	{
+
+	public boolean checkDispo(Rdv rdv) throws BLLException {
 		try {
 			List<Rdv> agenda = agendaDAO.selectAll();
-			
+
 			for (Rdv rdv2 : agenda) {
-				if (rdv.getDateRdv() == rdv2.getDateRdv() && rdv.getNomVeterinaire().equals(rdv2.getNomVeterinaire())) {
+				if (rdv.getDateRdv() == rdv2.getDateRdv() && rdv.getCodeVeterinaire() == rdv2.getCodeVeterinaire()) {
 					return false;
 				}
 			}
 			return true;
-			
+
 		} catch (DALException e) {
 			throw new BLLException("Erreur à la vérification de la disponibilité du/de la vétérinaire", e);
 		}
-		
+
+	}
+
+	public String heureDate(Rdv rdv) {
+
+		calendar.setTime(rdv.getDateRdv());
+		String heures = Integer.toString(calendar.get(Calendar.HOUR_OF_DAY));
+		String minutes = Integer.toString(calendar.get(Calendar.MINUTE));
+
+		return heures + "h" + minutes;
+	}
+
+	public String nomDuClient(Rdv rdv) throws BLLException {
+
+		try {
+			String nom = animalDAO.selectById(rdv.getCodeAnimal()).getClient().getNom().toUpperCase();
+			String prenom = animalDAO.selectById(rdv.getCodeAnimal()).getClient().getPrenom();
+
+			return nom + " " + prenom;
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la récupération nom + prénom client pour un RDV", e);
+		}
+
+	}
+
+	public String nomAnimal(Rdv rdv) throws BLLException {
+		try {
+			return animalDAO.selectById(rdv.getCodeAnimal()).getNom();
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la récupération nom animal pour un RDV", e);
+		}
+	}
+
+	public String raceAnimal(Rdv rdv) throws BLLException {
+		try {
+			return animalDAO.selectById(rdv.getCodeAnimal()).getRace();
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la récupération race animal pour un RDV", e);
+		}
 	}
 
 }

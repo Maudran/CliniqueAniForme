@@ -15,6 +15,7 @@ import fr.eni.aniforme.bo.Animal;
 import fr.eni.aniforme.bo.Client;
 import fr.eni.aniforme.bo.Personnel;
 import fr.eni.aniforme.bo.Rdv;
+import fr.eni.aniforme.ihm.RdvAffichage;
 
 public class RDVDAOJdbcImpl implements DAO<Rdv> {
 
@@ -214,8 +215,8 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 
 		Rdv rdv = new Rdv();
 
-		rdv.setNomVeterinaire(personnel.getNom());
-		rdv.setNomAnimal(animal.getNom());
+		rdv.setCodeVeterinaire(personnel.getCodePers());
+		rdv.setCodeAnimal(animal.getCodeAnimal());
 		rdv.setDateRdv(resultSet.getTimestamp("daterdv"));
 
 		return rdv;
@@ -226,8 +227,8 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 		DAO<Personnel> personnelDAO = DAOFactory.getPersonnelDAO();
 		DAO<Animal> animalDAO = DAOFactory.getAnimalDAO();
 
-		int codePers = personnelDAO.selectByNom(rdv.getNomVeterinaire()).getCodePers();
-		int codeAnimal = animalDAO.selectByNom(rdv.getNomAnimal()).getCodeAnimal();
+		int codePers = personnelDAO.selectById(rdv.getCodeVeterinaire()).getCodePers();
+		int codeAnimal = animalDAO.selectById(rdv.getCodeAnimal()).getCodeAnimal();
 
 		statement.setInt(1, codePers);
 		statement.setTimestamp(2, new Timestamp(rdv.getDateRdv().getTime()));

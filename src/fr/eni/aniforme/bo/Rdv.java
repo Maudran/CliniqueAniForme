@@ -4,24 +4,24 @@ import java.util.Date;
 
 public class Rdv {
 
-	private String nomVeterinaire;
-	private String nomAnimal;
+	private int codeVeterinaire;
+	private int codeAnimal;
 	private Date dateRdv;
 
-	public String getNomVeterinaire() {
-		return nomVeterinaire;
+	public int getCodeVeterinaire() {
+		return codeVeterinaire;
 	}
 
-	public void setNomVeterinaire(String nomVeterinaire) {
-		this.nomVeterinaire = nomVeterinaire;
+	public void setCodeVeterinaire(int codeVeterinaire) {
+		this.codeVeterinaire = codeVeterinaire;
 	}
 
-	public String getNomAnimal() {
-		return nomAnimal;
+	public int getCodeAnimal() {
+		return codeAnimal;
 	}
 
-	public void setNomAnimal(String nomAnimal) {
-		this.nomAnimal = nomAnimal;
+	public void setCodeAnimal(int codeAnimal) {
+		this.codeAnimal = codeAnimal;
 	}
 
 	public Date getDateRdv() {
@@ -34,7 +34,7 @@ public class Rdv {
 
 	@Override
 	public String toString() {
-		return "Rdv [nomVeterinaire=" + nomVeterinaire + ", nomAnimal=" + nomAnimal + ", dateRdv=" + dateRdv + "]";
+		return "Rdv [nomVeterinaire=" + codeVeterinaire + ", nomAnimal=" + codeAnimal + ", dateRdv=" + dateRdv + "]";
 	}
 
 }
