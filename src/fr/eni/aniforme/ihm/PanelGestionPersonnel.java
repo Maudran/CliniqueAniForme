@@ -2,11 +2,16 @@ package fr.eni.aniforme.ihm;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.PrintWriter;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
@@ -19,6 +24,7 @@ public class PanelGestionPersonnel extends JPanel {
 		if (btnAjouter == null) {
 			btnAjouter = new JButton("Ajouter");
 		}
+
 		btnAjouter.addActionListener(new ActionListener() {
 
 			@Override
@@ -26,7 +32,9 @@ public class PanelGestionPersonnel extends JPanel {
 				JFrame frameAjoutEmploye = new JFrame("Ajout d'un employé");
 				frameAjoutEmploye.setVisible(true);
 				frameAjoutEmploye.pack();
-
+				frameAjoutEmploye.setSize(800, 500);
+				frameAjoutEmploye.setLocationRelativeTo(null);
+				
 			}
 		});
 		return btnAjouter;
@@ -37,13 +45,15 @@ public class PanelGestionPersonnel extends JPanel {
 			btnSupprimer = new JButton("Supprimer");
 		}
 		btnSupprimer.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFrame frameSupprimerEmploye = new JFrame("Archivage d'un employé");
-				frameSupprimerEmploye.setVisible(true);
-				frameSupprimerEmploye.pack();
-				
+				JOptionPane jop1;
+
+				jop1 = new JOptionPane();
+				JOptionPane.showMessageDialog(jop1, "Confirmez vous l'archivage");
+			
+
 			}
 		});
 		return btnSupprimer;
@@ -54,13 +64,15 @@ public class PanelGestionPersonnel extends JPanel {
 			btnReinitialiser = new JButton("Réinitialiser");
 		}
 		btnReinitialiser.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFrame frameReinitialiserEmploye = new JFrame("Réinitialiser le mot de passe d'un employé");
 				frameReinitialiserEmploye.setVisible(true);
 				frameReinitialiserEmploye.pack();
-				
+				frameReinitialiserEmploye.setSize(800, 500);
+				frameReinitialiserEmploye.setLocationRelativeTo(null);
+
 			}
 		});
 		return btnReinitialiser;

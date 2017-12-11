@@ -3,12 +3,15 @@ package fr.eni.aniforme.ihm;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -27,6 +30,18 @@ public class PanelClients extends JPanel {
 		if (btnRechercherClient == null) {
 			btnRechercherClient = new JButton("Recherche");
 		}
+		btnRechercherClient.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame frameRechercheClient = new JFrame("Résultat de la recherche");
+				frameRechercheClient.setVisible(true);
+				frameRechercheClient.pack();
+				frameRechercheClient.setSize(500, 200);
+				frameRechercheClient.setLocationRelativeTo(null);
+				
+			}
+		});
 		return btnRechercherClient;
 	}
 
@@ -34,6 +49,18 @@ public class PanelClients extends JPanel {
 		if (btnAjouterClient == null) {
 			btnAjouterClient = new JButton ("Ajouter");
 		}
+		btnAjouterClient.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame frameAjoutClient = new JFrame("Ajouter un client");
+				frameAjoutClient.setVisible(true);
+				frameAjoutClient.pack();
+				frameAjoutClient.setSize(500, 200);
+				frameAjoutClient.setLocationRelativeTo(null);
+				
+			}
+		});
 		return btnAjouterClient;
 	}
 
@@ -41,6 +68,18 @@ public class PanelClients extends JPanel {
 		if (btnSupprimerClient == null) {
 			btnSupprimerClient = new JButton ("Supprimer");
 		}
+		btnSupprimerClient.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane jop1;
+
+				jop1 = new JOptionPane();
+				JOptionPane.showMessageDialog(jop1, "Confirmez vous l'archivage");
+			
+
+			}
+		});
 		return btnSupprimerClient;
 	}
 
@@ -195,6 +234,7 @@ public class PanelClients extends JPanel {
 
 		gbc.gridy = 0;
 		gbc.gridx = 0;
+		gbc.anchor = GridBagConstraints.WEST;
 		add(getBtnRechercherClient(), gbc);
 
 		gbc.gridy = 0;

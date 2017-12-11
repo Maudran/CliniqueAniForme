@@ -2,11 +2,14 @@ package fr.eni.aniforme.ihm;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -42,6 +45,18 @@ public class PanelAgenda extends JPanel {
 		if (btnDossierMedical == null) {
 			btnDossierMedical = new JButton("Dossier Médical");
 		}
+		btnDossierMedical.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame frameDossierMedical = new JFrame("Dossier Médical");
+				frameDossierMedical.setVisible(true);
+				frameDossierMedical.pack();
+				frameDossierMedical.setSize(800, 500);
+				frameDossierMedical.setLocationRelativeTo(null);
+				
+			}
+		});
 		return btnDossierMedical;
 	}
 

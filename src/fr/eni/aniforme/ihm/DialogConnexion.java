@@ -35,6 +35,7 @@ public class DialogConnexion extends JDialog {
 		this.getContentPane().add(getTextMotPasse());
 		
 		this.getContentPane().add(getBtnValider());
+		
 	}
 
 	public JTextField getTextNom() {

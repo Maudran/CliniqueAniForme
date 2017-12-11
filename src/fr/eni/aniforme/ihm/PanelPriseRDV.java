@@ -24,12 +24,14 @@ import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class PanelPriseRDV extends JPanel {
 	private JLabel lblClient, lblAnimal, lblVeterinaire, lblDate, lblHeure, lblMinute;
-	private JButton btnSupprimer, btnValider;
+	private JButton btnSupprimer, btnValider, btnAjouter;
 	private JComboBox<String> cboVeterinaire, cboClient, cboAnimal, cboHeure, cboMinute;
 	private JScrollPane tableAgenda;
 	
 	PersonnelManager personnelManager = PersonnelManager.getInstance();
 	ClientManager clientManager = ClientManager.getInstance();
+	
+	
 	
 	
 	public PanelPriseRDV() {
@@ -40,11 +42,59 @@ public class PanelPriseRDV extends JPanel {
 		gbc.gridx = 0;
 		add(getLblClient(), gbc);
 		
-		UtilDateModel model = new UtilDateModel();
-		model.setValue(new Date());
-		JDatePanelImpl datePanel = new JDatePanelImpl(model);
-		JDatePickerImpl dpCalendar = new JDatePickerImpl(datePanel);
+		gbc.gridy = 1;
+		gbc.gridx = 0;
+		add (getCboClient(), gbc);
+		
+		gbc.gridy = 1;
+		gbc.gridx = 1;
+		add (getBtnAjouter(), gbc);
+		
+		gbc.gridy = 2;
+		gbc.gridx = 0;
+		add(getLblAnimal(), gbc);
+		
+		gbc.gridy = 3;
+		gbc.gridx = 0;
+		add (getCboAnimal(), gbc);
+		
+		gbc.gridy = 3;
+		gbc.gridx = 1;
+		add (getBtnAjouter(), gbc);
+		
+		gbc.gridy = 0;
+		gbc.gridx = 2;
+		add (getLblVeterinaire(),gbc);
+		
+		gbc.gridy = 1;
+		gbc.gridx = 2;
+		add (getCboVeterinaire(), gbc);
+		
+		gbc.gridy = 0;
+		gbc.gridx = 3;
+		add (getLblDate(),gbc);
+		
+//		gbc.gridy = 1;
+//		gbc.gridx = 3;
+//		add(dpCalendar, gbc);
+		
+		gbc.gridy = 2;
+		gbc.gridx = 3;
+		add (getLblHeure(),gbc);
+		
+		gbc.gridy = 2;
+		gbc.gridx = 4;
+		add (getLblMinute(),gbc);
 	}
+		
+		
+		
+		
+//		UtilDateModel model = new UtilDateModel();
+//		model.setValue(new Date());
+//		JDatePanelImpl datePanel = new JDatePanelImpl(model);
+//		JDatePickerImpl dpCalendar = new JDatePickerImpl(datePanel);
+//	}
 
 	public JLabel getLblClient() {
 		if (lblClient == null) {
@@ -100,6 +150,13 @@ public class PanelPriseRDV extends JPanel {
 			btnValider = new JButton("Valider");
 		}
 		return btnValider;
+	}
+	
+	public JButton getBtnAjouter() {
+		if (btnAjouter == null) {
+			btnAjouter = new JButton("+");
+		}
+		return btnAjouter;
 	}
 
 	public JComboBox getCboVeterinaire() {
