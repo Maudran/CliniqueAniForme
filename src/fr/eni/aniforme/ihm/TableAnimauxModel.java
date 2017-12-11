@@ -13,6 +13,7 @@ import fr.eni.aniforme.bll.AnimalManager;
 import fr.eni.aniforme.bll.BLLException;
 import fr.eni.aniforme.bll.ClientManager;
 import fr.eni.aniforme.bo.Animal;
+import fr.eni.aniforme.bo.Client;
 import fr.eni.aniforme.bo.RdvAffichage;
 
 public class TableAnimauxModel extends AbstractTableModel {
@@ -79,7 +80,8 @@ public class TableAnimauxModel extends AbstractTableModel {
 		
 		try {
 			
-			animaux = clientManager.getClientWithAnimals
+			List<Client> clients = clientManager.getClients();
+			animaux = clientManager.getClientWithAnimals(3).getAnimaux();
 			fireTableDataChanged();
 		} catch (BLLException e) {
 			e.printStackTrace();
@@ -89,23 +91,13 @@ public class TableAnimauxModel extends AbstractTableModel {
 	
 	public void updateVeterinaire(String nom, Date date) 
 	{
-		try {
-			animaux = agendaManager.getRdvAffichageVet(nom, date);
-			fireTableDataChanged();
-		} catch (BLLException e) {
-			e.printStackTrace();
-		}
+	
 		
 	}
 	
 	public void updateDate(Date date)
 	{
-		try {
-			animaux = agendaManager.getRdvAffichageDate(date);
-			fireTableDataChanged();
-		} catch (BLLException e) {
-			e.printStackTrace();
-		}
+		
 	}
 
 }
