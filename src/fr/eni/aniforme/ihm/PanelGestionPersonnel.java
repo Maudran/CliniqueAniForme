@@ -2,18 +2,41 @@ package fr.eni.aniforme.ihm;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import fr.eni.aniforme.bo.Personnel;
 
 public class PanelGestionPersonnel extends JPanel {
 
 	private JButton btnAjouter, btnSupprimer, btnReinitialiser;
 	private JPanel panelButtons;
+	private JScrollPane tableauScrollPane;
+	private JTable tableau;
+	private TableEmployesModel tableauModel;
+	
+	public PanelGestionPersonnel() {
+		setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(2, 5, 2, 5);
+
+		gbc.gridy = 0;
+		gbc.gridx = 0;
+		add(getPanelButtons(), gbc);
+
+		gbc.gridy = 1;
+		add(getTableauScrollPane(), gbc);
+
+
+	}
 
 	public JButton getBtnAjouter() {
 		if (btnAjouter == null) {
@@ -66,6 +89,27 @@ public class PanelGestionPersonnel extends JPanel {
 		return btnReinitialiser;
 	}
 
+	public JScrollPane getTableauScrollPane() {
+		if (tableauScrollPane == null) {
+			tableauScrollPane = new JScrollPane(getTable());
+		}
+		return tableauScrollPane;
+	}
+
+	public JTable getTable() {
+		if (tableau == null) {
+			tableau = new JTable(getTableauModel());
+		}
+		return tableau;
+	}
+
+	public TableEmployesModel getTableauModel() {
+		if (tableauModel == null) {
+			tableauModel = new TableEmployesModel();
+		}
+		return tableauModel;
+	}
+
 	public JPanel getPanelButtons() {
 		if (panelButtons == null) {
 			panelButtons = new JPanel();
@@ -79,23 +123,6 @@ public class PanelGestionPersonnel extends JPanel {
 
 	}
 
-	public PanelGestionPersonnel() {
-		setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
 
-		gbc.gridy = 0;
-		gbc.gridx = 0;
-		// gbc.insets = new Insets(2, 5, 2, 5);
-		add(getBtnAjouter(), gbc);
-
-		gbc.gridy = 0;
-		gbc.gridx = 1;
-		add(getBtnSupprimer(), gbc);
-
-		gbc.gridy = 0;
-		gbc.gridx = 2;
-		add(getBtnReinitialiser(), gbc);
-
-	}
 
 }
