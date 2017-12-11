@@ -2,11 +2,14 @@ package fr.eni.aniforme.ihm;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -46,6 +49,18 @@ public class PanelAgenda extends JPanel {
 	public JButton getBtnDossierMedical() {
 		if (btnDossierMedical == null) {
 			btnDossierMedical = new JButton("Dossier Médical");
+			btnDossierMedical.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					JFrame frameDossierMedical = new JFrame("Dossier médical");
+					frameDossierMedical.setVisible(true);
+					frameDossierMedical.pack();
+					frameDossierMedical.setSize(800, 500);
+					frameDossierMedical.setLocationRelativeTo(null);
+
+				}
+			});
 		}
 		return btnDossierMedical;
 	}
@@ -70,7 +85,7 @@ public class PanelAgenda extends JPanel {
 		}
 		return cboVeterinaire;
 	}
-	
+
 	public JScrollPane getTableAgenda() {
 		if (tableAgenda == null) {
 			tableAgenda = new JScrollPane(getTableau());
@@ -95,7 +110,7 @@ public class PanelAgenda extends JPanel {
 	public PanelAgenda() {
 		setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-		
+
 		UtilDateModel model = new UtilDateModel();
 		model.setValue(new Date());
 		JDatePanelImpl datePanel = new JDatePanelImpl(model);

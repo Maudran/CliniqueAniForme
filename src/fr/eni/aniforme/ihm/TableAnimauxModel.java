@@ -9,17 +9,21 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import fr.eni.aniforme.bll.AgendaManager;
+import fr.eni.aniforme.bll.AnimalManager;
 import fr.eni.aniforme.bll.BLLException;
+import fr.eni.aniforme.bll.ClientManager;
+import fr.eni.aniforme.bo.Animal;
 import fr.eni.aniforme.bo.RdvAffichage;
 
-public class TableAgendaModel extends AbstractTableModel {
+public class TableAnimauxModel extends AbstractTableModel {
 
-	private List<RdvAffichage> rdvAffichage = new ArrayList<RdvAffichage>();
-	private final String[] entetes = { "Heure", "Nom du client", "Animal", "Race" };
-	AgendaManager agendaManager = AgendaManager.getInstance();
+	private List<Animal> animaux = new ArrayList<Animal>();
+	private final String[] entetes = { "Numero", "Nom", "Sexe", "Couleur", "Race", "Tatouage" };
+	AnimalManager animalManager = AnimalManager.getInstance();
+	ClientManager clientManager = ClientManager.getInstance();
 	Calendar calendar = GregorianCalendar.getInstance();
 
-	public TableAgendaModel() {
+	public TableAnimauxModel() {
 		updateData();
 	}
 
@@ -30,7 +34,7 @@ public class TableAgendaModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return rdvAffichage.size();
+		return animaux.size();
 	}
 
 	public String getColumnName(int columnIndex) {
@@ -41,19 +45,25 @@ public class TableAgendaModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Object result = null;
 
-		if (rowIndex < rdvAffichage.size()) {
+		if (rowIndex < animaux.size()) {
 			switch (columnIndex) {
 			case 0:
-				result = rdvAffichage.get(rowIndex).getHeure();
+				result = animaux.get(rowIndex).getCodeAnimal();
 				break;
 			case 1:
-				result = rdvAffichage.get(rowIndex).getNomDuClient();
+				result = animaux.get(rowIndex).getNom();
 				break;
 			case 2:
-				result = rdvAffichage.get(rowIndex).getAnimal();
+				result = animaux.get(rowIndex).getSexe();
 				break;
 			case 3:
-				result = rdvAffichage.get(rowIndex).getRace();
+				result = animaux.get(rowIndex).getCouleur();
+				break;
+			case 4:
+				result = animaux.get(rowIndex).getRace();
+				break;
+			case 5:
+				result = animaux.get(rowIndex).getTatouage();
 				break;
 			}
 		}
@@ -61,15 +71,15 @@ public class TableAgendaModel extends AbstractTableModel {
 		return result;
 	}
 	
-	public RdvAffichage getValueAt(int rowIndex) {
-		return rdvAffichage.get(rowIndex);
+	public Animal getValueAt(int rowIndex) {
+		return animaux.get(rowIndex);
 	}
 
 	public void updateData() {
 		
 		try {
 			
-			rdvAffichage = agendaManager.getRdvAffichageDate(new Date());
+			animaux = clientManager.getClientWithAnimals
 			fireTableDataChanged();
 		} catch (BLLException e) {
 			e.printStackTrace();
@@ -80,7 +90,7 @@ public class TableAgendaModel extends AbstractTableModel {
 	public void updateVeterinaire(String nom, Date date) 
 	{
 		try {
-			rdvAffichage = agendaManager.getRdvAffichageVet(nom, date);
+			animaux = agendaManager.getRdvAffichageVet(nom, date);
 			fireTableDataChanged();
 		} catch (BLLException e) {
 			e.printStackTrace();
@@ -91,7 +101,7 @@ public class TableAgendaModel extends AbstractTableModel {
 	public void updateDate(Date date)
 	{
 		try {
-			rdvAffichage = agendaManager.getRdvAffichageDate(date);
+			animaux = agendaManager.getRdvAffichageDate(date);
 			fireTableDataChanged();
 		} catch (BLLException e) {
 			e.printStackTrace();
