@@ -29,21 +29,23 @@ public class PanelClients extends JPanel {
 	public JButton getBtnRechercherClient() {
 		if (btnRechercherClient == null) {
 			btnRechercherClient = new JButton("Recherche");
-		}
-		btnRechercherClient.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrame frameRechercheClient = new JFrame("Résultat de la recherche");
-				frameRechercheClient.setVisible(true);
-				frameRechercheClient.pack();
-				frameRechercheClient.setSize(500, 200);
-				frameRechercheClient.setLocationRelativeTo(null);
+			btnRechercherClient.addActionListener(new ActionListener() {
 				
-			}
-		});
-		return btnRechercherClient;
-	}
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JFrame frameRechercheClient = new JFrame("Résultat de la recherche");
+					frameRechercheClient.setVisible(true);
+					frameRechercheClient.pack();
+					frameRechercheClient.setSize(500, 200);
+					frameRechercheClient.setLocationRelativeTo(null);
+					
+				}
+			});
+		}
+			return btnRechercherClient;
+		}
+		
+
 
 	public JButton getBtnAjouterClient() {
 		if (btnAjouterClient == null) {

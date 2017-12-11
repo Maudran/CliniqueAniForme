@@ -12,6 +12,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import fr.eni.aniforme.bll.BLLException;
 import fr.eni.aniforme.bll.PersonnelManager;
@@ -26,6 +28,9 @@ public class PanelAgenda extends JPanel {
 	private JButton btnDossierMedical;
 	private JComboBox<String> cboVeterinaire;
 	PersonnelManager personnelManager = PersonnelManager.getInstance();
+	private JScrollPane tableAgenda;
+	private JTable tableau;
+	private TableAgendaModel model;
 
 	public JLabel getLblVeterinaire() {
 		if (lblVeterinaire == null) {
@@ -45,19 +50,18 @@ public class PanelAgenda extends JPanel {
 		if (btnDossierMedical == null) {
 			btnDossierMedical = new JButton("Dossier Médical");
 			btnDossierMedical.addActionListener(new ActionListener() {
-				
+
 				@Override
-				public void actionPerformed(ActionEvent e) {
-					JFrame frameDossierMedical = new JFrame("Dossier Médical");
+				public void actionPerformed(ActionEvent arg0) {
+					JFrame frameDossierMedical = new JFrame("Dossier médical");
 					frameDossierMedical.setVisible(true);
 					frameDossierMedical.pack();
 					frameDossierMedical.setSize(800, 500);
 					frameDossierMedical.setLocationRelativeTo(null);
-					
+
 				}
 			});
 		}
-	
 		return btnDossierMedical;
 	}
 
@@ -82,10 +86,31 @@ public class PanelAgenda extends JPanel {
 		return cboVeterinaire;
 	}
 
+	public JScrollPane getTableAgenda() {
+		if (tableAgenda == null) {
+			tableAgenda = new JScrollPane(getTableau());
+		}
+		return tableAgenda;
+	}
+
+	public TableAgendaModel getModel() {
+		if (model == null) {
+			model = new TableAgendaModel();
+		}
+		return model;
+	}
+
+	public JTable getTableau() {
+		if (tableau == null) {
+			tableau = new JTable(getModel());
+		}
+		return tableau;
+	}
+
 	public PanelAgenda() {
 		setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-		
+
 		UtilDateModel model = new UtilDateModel();
 		model.setValue(new Date());
 		JDatePanelImpl datePanel = new JDatePanelImpl(model);
