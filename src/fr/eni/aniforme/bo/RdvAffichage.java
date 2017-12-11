@@ -1,4 +1,4 @@
-package fr.eni.aniforme.ihm;
+package fr.eni.aniforme.bo;
 
 public class RdvAffichage {
 	
@@ -44,6 +44,12 @@ public class RdvAffichage {
 
 	public void setRace(String race) {
 		this.race = race;
+	}
+
+	@Override
+	public String toString() {
+		return "RdvAffichage [heure=" + heure + ", nomDuClient=" + nomDuClient + ", animal=" + animal + ", race=" + race
+				+ "]";
 	}
 
 }

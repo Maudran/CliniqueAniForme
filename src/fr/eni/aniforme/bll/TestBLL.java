@@ -42,8 +42,14 @@ public class TestBLL {
 			Date date = format.parse(string);
 			
 			System.out.println(date);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date dateDuJour = sdf.parse(sdf.format(new Date()));
+			
+			System.out.println(dateDuJour);
 
-			System.out.println(agenda.getAgendaByDate(date));
+			System.out.println(agenda.getAgendaByDate(dateDuJour));
+			System.out.println(agenda.getRdvAffichageDate(new Date()));
 
 		} catch (BLLException e) {
 

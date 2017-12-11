@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import fr.eni.aniforme.bll.BLLException;
 import fr.eni.aniforme.bll.PersonnelManager;
@@ -23,6 +25,9 @@ public class PanelAgenda extends JPanel {
 	private JButton btnDossierMedical;
 	private JComboBox<String> cboVeterinaire;
 	PersonnelManager personnelManager = PersonnelManager.getInstance();
+	private JScrollPane tableAgenda;
+	private JTable tableau;
+	private TableAgendaModel model;
 
 	public JLabel getLblVeterinaire() {
 		if (lblVeterinaire == null) {
@@ -65,6 +70,27 @@ public class PanelAgenda extends JPanel {
 		}
 		return cboVeterinaire;
 	}
+	
+	public JScrollPane getTableAgenda() {
+		if (tableAgenda == null) {
+			tableAgenda = new JScrollPane(getTableau());
+		}
+		return tableAgenda;
+	}
+
+	public TableAgendaModel getModel() {
+		if (model == null) {
+			model = new TableAgendaModel();
+		}
+		return model;
+	}
+
+	public JTable getTableau() {
+		if (tableau == null) {
+			tableau = new JTable(getModel());
+		}
+		return tableau;
+	}
 
 	public PanelAgenda() {
 		setLayout(new GridBagLayout());
@@ -77,23 +103,26 @@ public class PanelAgenda extends JPanel {
 
 		gbc.gridy = 0;
 		gbc.gridx = 0;
-		add(getLblVeterinaire(), gbc);
+//		add(getLblVeterinaire(), gbc);
+//
+//		gbc.gridy = 0;
+//		gbc.gridx = 1;
+//		add(getCboVeterinaire(), gbc);
+//
+//		gbc.gridy = 0;
+//		gbc.gridx = 2;
+//		add(getLblDate(), gbc);
+//
+//		gbc.gridy = 0;
+//		gbc.gridx = 4;
+//		add(dpCalendar, gbc);
+//		
+//		gbc.gridy = 1;
+		add(getTableAgenda(), gbc);
 
-		gbc.gridy = 0;
-		gbc.gridx = 1;
-		add(getCboVeterinaire(), gbc);
-
-		gbc.gridy = 0;
-		gbc.gridx = 2;
-		add(getLblDate(), gbc);
-
-		gbc.gridy = 0;
-		gbc.gridx = 4;
-		add(dpCalendar, gbc);
-
-		gbc.gridy = 8;
-		gbc.gridx = 5;
-		add(getBtnDossierMedical(), gbc);
+//		gbc.gridy = 2;
+//		gbc.gridx = 5;
+//		add(getBtnDossierMedical(), gbc);
 
 	}
 

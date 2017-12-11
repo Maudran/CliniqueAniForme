@@ -38,4 +38,6 @@ public interface DAO<T> {
 
 	public ArrayList<Client> selectAllWithAnimals() throws DALException;
 
+	List<Rdv> selectAgendaVet(String nom, Date date) throws DALException;
+
 }

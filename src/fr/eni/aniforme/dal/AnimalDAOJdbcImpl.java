@@ -272,4 +272,10 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 		return null;
 	}
 
+	@Override
+	public List<Rdv> selectAgendaVet(String nom, Date date) throws DALException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

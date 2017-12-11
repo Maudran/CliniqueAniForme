@@ -303,4 +303,10 @@ public class ClientDAOJdbcImpl implements DAO<Client> {
 
 	}
 
+	@Override
+	public List<Rdv> selectAgendaVet(String nom, Date date) throws DALException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

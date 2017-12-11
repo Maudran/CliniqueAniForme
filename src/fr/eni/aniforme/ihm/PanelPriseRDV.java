@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import fr.eni.aniforme.bll.BLLException;
 import fr.eni.aniforme.bll.ClientManager;
@@ -25,13 +26,15 @@ import net.sourceforge.jdatepicker.impl.UtilDateModel;
 public class PanelPriseRDV extends JPanel {
 	private JLabel lblClient, lblAnimal, lblVeterinaire, lblDate, lblHeure, lblMinute;
 	private JButton btnSupprimer, btnValider;
-	private JComboBox<String> cboVeterinaire, cboClient, cboAnimal, cboHeure, cboMinute;
+	private JComboBox<String> cboVeterinaire, cboClient, cboHeure, cboMinute;
+	private JComboBox<Animal> cboAnimal;
 	private JScrollPane tableAgenda;
-	
+	private JTable tableau;
+	private TableAgendaModel model;
+
 	PersonnelManager personnelManager = PersonnelManager.getInstance();
 	ClientManager clientManager = ClientManager.getInstance();
-	
-	
+
 	public PanelPriseRDV() {
 		setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -39,7 +42,7 @@ public class PanelPriseRDV extends JPanel {
 		gbc.gridy = 0;
 		gbc.gridx = 0;
 		add(getLblClient(), gbc);
-		
+
 		UtilDateModel model = new UtilDateModel();
 		model.setValue(new Date());
 		JDatePanelImpl datePanel = new JDatePanelImpl(model);
@@ -136,48 +139,59 @@ public class PanelPriseRDV extends JPanel {
 			}
 			String[] clientsArray = clients.toArray(new String[0]);
 			cboClient = new JComboBox<String>(clientsArray);
+			while (cboClient.getSelectedItem() == null) {
+				getCboAnimal().setEnabled(false);
+			}
 		}
 		return cboClient;
 	}
 
-	public JComboBox<String> getCboAnimal() {
-		List<String> animaux = new ArrayList<String>();
+	public JComboBox<Animal> getCboAnimal() {
 		List<Animal> choixAnimal;
 		if (cboAnimal == null) {
 			if (getCboClient().getSelectedItem() != null) {
-				choixAnimal = ((Client)getCboClient().getSelectedItem()).getAnimaux();
-				for (Animal animal : choixAnimal) {
-					animaux.add(animal.getNom());
-				}
+				cboAnimal.setEnabled(true);
+				choixAnimal = ((Client) getCboClient().getSelectedItem()).getAnimaux();
+				Animal[] animauxArray = choixAnimal.toArray(new Animal[0]);
+				cboAnimal = new JComboBox<Animal>(animauxArray);
 			}
-			String[] animauxArray = animaux.toArray(new String[0]);
-			cboClient = new JComboBox<String>(animauxArray);
+
 		}
 		return cboAnimal;
 	}
 
 	public JComboBox<String> getCboHeure() {
 		if (cboHeure == null) {
-			cboHeure = new JComboBox<String>(new String[] {"09","10","11","13","14","15","16","17"});
+			cboHeure = new JComboBox<String>(new String[] { "09", "10", "11", "13", "14", "15", "16", "17" });
 		}
 		return cboHeure;
 	}
 
 	public JComboBox<String> getCboMinute() {
 		if (cboMinute == null) {
-			cboMinute = new JComboBox<String>(new String[] {"00","15","30","45"});
+			cboMinute = new JComboBox<String>(new String[] { "00", "15", "30", "45" });
 		}
 		return cboMinute;
 	}
 
 	public JScrollPane getTableAgenda() {
 		if (tableAgenda == null) {
-			
+			tableAgenda = new JScrollPane(tableau);
 		}
 		return tableAgenda;
 	}
 
+	public TableAgendaModel getModel() {
+		if (model == null) {
+			model = new TableAgendaModel();
+		}
+		return model;
+	}
+
+	public JTable getTableau() {
+		if (tableau == null) {
+			tableau = new JTable(getModel());
+		}
+		return tableau;
+	}
 }
-
-
-

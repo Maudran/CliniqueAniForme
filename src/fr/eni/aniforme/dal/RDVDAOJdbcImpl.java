@@ -15,7 +15,7 @@ import fr.eni.aniforme.bo.Animal;
 import fr.eni.aniforme.bo.Client;
 import fr.eni.aniforme.bo.Personnel;
 import fr.eni.aniforme.bo.Rdv;
-import fr.eni.aniforme.ihm.RdvAffichage;
+import fr.eni.aniforme.bo.RdvAffichage;
 
 public class RDVDAOJdbcImpl implements DAO<Rdv> {
 
@@ -111,6 +111,39 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 		} catch (SQLException e) {
 			throw new DALException("Erreur à la récupération des rdv par nom", e);
 		}
+	}
+	
+	@Override
+	public List<Rdv> selectAgendaVet(String nom, Date date) throws DALException
+	{
+		openConnection();
+
+		String sql = "SELECT codeveto,daterdv,ag.codeanimal,codepers,nom,motpasse,role,p.archive,"
+				+ "nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage,CAST(antecedents AS varchar(max)) as antecedents,a.archive,"
+				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email,CAST(remarque AS varchar(max)) AS remarque,c.archive "
+				+ "FROM Agendas ag INNER JOIN Personnels p ON ag.codeveto = p.codepers "
+				+ "INNER JOIN Animaux a ON ag.codeanimal = a.codeanimal "
+				+ "INNER JOIN Clients c ON a.codeclient = c.codeclient "
+				+ "WHERE daterdv = ? AND nom = ? AND p.archive = 0 AND a.archive = 0 AND c.archive = 0 "
+				+ "GROUP BY codeveto,daterdv,ag.codeanimal,codepers,nom,motpasse,role,p.archive,"
+				+ "nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage,CAST(antecedents AS varchar(max)),a.archive,"
+				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email,CAST(remarque AS varchar(max)),c.archive";
+
+		List<Rdv> agenda = new LinkedList<>();
+
+		try {
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setTimestamp(1, new Timestamp(date.getTime()));
+			statement.setString(2, nom);
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				agenda.add(getRdvFromResultset(resultSet));
+			}
+			return agenda;
+		} catch (SQLException e) {
+			throw new DALException("Erreur à la récupération des rdv par veterinaire et par date", e);
+		}
+		
 	}
 
 	@Override

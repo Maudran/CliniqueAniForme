@@ -1,5 +1,6 @@
 package fr.eni.aniforme.bll;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,11 +11,11 @@ import fr.eni.aniforme.bo.Animal;
 import fr.eni.aniforme.bo.Client;
 import fr.eni.aniforme.bo.Personnel;
 import fr.eni.aniforme.bo.Rdv;
+import fr.eni.aniforme.bo.RdvAffichage;
 import fr.eni.aniforme.dal.DALException;
 import fr.eni.aniforme.dal.DAO;
 import fr.eni.aniforme.dal.DAOFactory;
 import fr.eni.aniforme.dal.RDVDAOJdbcImpl;
-import fr.eni.aniforme.ihm.RdvAffichage;
 
 public class AgendaManager {
 
@@ -36,8 +37,15 @@ public class AgendaManager {
 		return instance;
 	}
 
-	public void insertRdv(Rdv rdv) throws BLLException {
+	public void insertRdv(Animal animal, Date date, String nomVeto) throws BLLException {
+
+		Rdv rdv = new Rdv();
+
 		try {
+			rdv.setCodeVeterinaire(personnelDAO.selectByNom(nomVeto).getCodePers());
+			rdv.setCodeAnimal(animal.getCodeAnimal());
+			rdv.setDateRdv(date);
+
 			validerRdv(rdv);
 			agendaDAO.insert(rdv);
 		} catch (DALException e) {
@@ -53,9 +61,9 @@ public class AgendaManager {
 		}
 	}
 
-	public List<Rdv> getAgendaVeto(String nomVeto) throws BLLException {
+	public List<Rdv> getAgendaVeto(String nomVeto, Date date) throws BLLException {
 		try {
-			return agendaDAO.selectListByNom(nomVeto);
+			return agendaDAO.selectAgendaVet(nomVeto, date);
 		} catch (DALException e) {
 			throw new BLLException("Erreur à la récupération de l'agenda d'un vétérinaire : " + nomVeto, e);
 		}
@@ -69,19 +77,53 @@ public class AgendaManager {
 		}
 	}
 
-	public List<RdvAffichage> getRdvAffichageDate(Date date) throws BLLException
-	{
+	public List<RdvAffichage> getRdvAffichageDate(Date date) throws BLLException {
 		List<Rdv> agenda;
 		List<RdvAffichage> agendaAffichage = new ArrayList<RdvAffichage>();
 		try {
-			 agenda = agendaDAO.selectByDate(date);
-			 
-			 for (Rdv rdv : agenda) {
-				agendaAffichage.add(new RdvAffichage(heureDate(rdv), nomDuClient(rdv), nomAnimal(rdv), raceAnimal(rdv)));
+			agenda = agendaDAO.selectAll();
+			calendar.setTime(date);
+			int annee = calendar.get(Calendar.YEAR);
+			int mois = calendar.get(Calendar.MONTH);
+			int jour = calendar.get(Calendar.DAY_OF_MONTH);
+
+			for (Rdv rdv : agenda) {
+				calendar.setTime(rdv.getDateRdv());
+				if (calendar.get(Calendar.YEAR) == annee && calendar.get(Calendar.MONTH) == mois
+						&& calendar.get(Calendar.DAY_OF_MONTH) == jour) {
+
+					agendaAffichage
+							.add(new RdvAffichage(heureDate(rdv), nomDuClient(rdv), nomAnimal(rdv), raceAnimal(rdv)));
+				}
 			}
-			 
+
 		} catch (DALException e) {
-			throw new BLLException("Erreur à la récupération des rdv à afficher",e);
+			throw new BLLException("Erreur à la récupération des rdv à afficher", e);
+		}
+		return agendaAffichage;
+	}
+
+	public List<RdvAffichage> getRdvAffichageVet(String nom, Date date) throws BLLException {
+		List<Rdv> agenda;
+		List<RdvAffichage> agendaAffichage = new ArrayList<RdvAffichage>();
+		try {
+			agenda = agendaDAO.selectListByNom(nom);
+			calendar.setTime(date);
+			int annee = calendar.get(Calendar.YEAR);
+			int mois = calendar.get(Calendar.MONTH);
+			int jour = calendar.get(Calendar.DAY_OF_MONTH);
+
+			for (Rdv rdv : agenda) {
+				calendar.setTime(rdv.getDateRdv());
+				if (calendar.get(Calendar.YEAR) == annee && calendar.get(Calendar.MONTH) == mois
+						&& calendar.get(Calendar.DAY_OF_MONTH) == jour) {
+					agendaAffichage
+							.add(new RdvAffichage(heureDate(rdv), nomDuClient(rdv), nomAnimal(rdv), raceAnimal(rdv)));
+				}
+			}
+
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la récupération des rdv à afficher", e);
 		}
 		return agendaAffichage;
 	}
@@ -161,6 +203,21 @@ public class AgendaManager {
 		} catch (DALException e) {
 			throw new BLLException("Erreur à la récupération race animal pour un RDV", e);
 		}
+	}
+
+	public Date getDateDuJour() {
+		calendar.setTime(new Date());
+		int annee = calendar.get(Calendar.YEAR);
+		int mois = calendar.get(Calendar.MONTH);
+		int jour = calendar.get(Calendar.DAY_OF_MONTH);
+
+		Date dateDuJour = null;
+		calendar.setTime(dateDuJour);
+		calendar.set(Calendar.YEAR, annee);
+		calendar.set(Calendar.MONTH, mois);
+		calendar.set(Calendar.DAY_OF_MONTH, jour);
+
+		return dateDuJour;
 	}
 
 }

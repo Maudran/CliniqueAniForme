@@ -96,9 +96,7 @@ public class Animal {
 
 	@Override
 	public String toString() {
-		return "Animal [codeAnimal=" + codeAnimal + ", nom=" + nom + ", sexe=" + sexe + ", couleur=" + couleur
-				+ ", race=" + race + ", espece=" + espece + ", tatouage=" + tatouage + ", antecedents=" + antecedents
-				+ ", client=" + client + "]";
+		return nom;
 	}
 
 }
