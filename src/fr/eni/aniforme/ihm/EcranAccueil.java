@@ -40,23 +40,17 @@ public class EcranAccueil extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.insets = new Insets(2, 2, 2, 2);
-
 		getMenuFichier().add(getItemDeconnexion());
 		getMenuFichier().add(getItemFermer());
 		getMenubar().add(getMenuFichier());
 
-		getMenuGestionRdv().add(getItemPriseRdv(gbc));
-		getMenuGestionRdv().add(getItemGestionClients(gbc));
+		getMenuGestionRdv().add(getItemPriseRdv());
+		getMenuGestionRdv().add(getItemGestionClients());
 
 		getMenubar().add(getMenuGestionRdv());
 
-		getMenubar().add(getMenuAgenda(gbc));
-		getMenubar().add(getMenuGestionPersonnel(gbc));
+		getMenubar().add(getMenuAgenda());
+		getMenubar().add(getMenuGestionPersonnel());
 
 		setJMenuBar(getMenubar());
 
@@ -85,7 +79,7 @@ public class EcranAccueil extends JFrame {
 		return menuGestionRdv;
 	}
 
-	public JMenu getMenuAgenda(GridBagConstraints gbc) {
+	public JMenu getMenuAgenda() {
 		if (menuAgenda == null) {
 			menuAgenda = new JMenu("Agenda");
 			menuAgenda.addMenuListener(new MenuListener() {
@@ -93,7 +87,7 @@ public class EcranAccueil extends JFrame {
 				@Override
 				public void menuSelected(MenuEvent e) {
 					getContentPane().removeAll();
-					getContentPane().add(getPanelAgenda(), gbc);
+					getContentPane().add(getPanelAgenda());
 					getContentPane().revalidate();
 				}
 
@@ -105,11 +99,18 @@ public class EcranAccueil extends JFrame {
 				public void menuCanceled(MenuEvent e) {
 				}
 			});
+			menuAgenda.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("Hellllowwwww!!!");
+				}
+			});
 		}
 		return menuAgenda;
 	}
 
-	public JMenu getMenuGestionPersonnel(GridBagConstraints gbc) {
+	public JMenu getMenuGestionPersonnel() {
 		if (menuGestionPersonnel == null) {
 			menuGestionPersonnel = new JMenu("Gestion du personnel");
 			menuGestionPersonnel.addMenuListener(new MenuListener() {
@@ -117,8 +118,9 @@ public class EcranAccueil extends JFrame {
 				@Override
 				public void menuSelected(MenuEvent e) {
 					getContentPane().removeAll();
-					getContentPane().add(getPanelGestionPersonnel(), gbc);
-					getContentPane().revalidate();
+					getContentPane().add(getPanelGestionPersonnel());
+					revalidate();
+					repaint();
 				}
 
 				@Override
@@ -140,7 +142,7 @@ public class EcranAccueil extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
+					System.out.println("Bye bye");
 
 				}
 			});
@@ -162,7 +164,7 @@ public class EcranAccueil extends JFrame {
 		return itemFermer;
 	}
 
-	public JMenuItem getItemPriseRdv(GridBagConstraints gbc) {
+	public JMenuItem getItemPriseRdv() {
 		if (itemPriseRdv == null) {
 			itemPriseRdv = new JMenuItem("Prise de RDV");
 			itemPriseRdv.addActionListener(new ActionListener() {
@@ -170,7 +172,7 @@ public class EcranAccueil extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					getContentPane().removeAll();
-					getContentPane().add(getPanelPriseRDV(), gbc);
+					getContentPane().add(getPanelPriseRDV());
 					getContentPane().revalidate();
 				}
 			});
@@ -178,7 +180,7 @@ public class EcranAccueil extends JFrame {
 		return itemPriseRdv;
 	}
 
-	public JMenuItem getItemGestionClients(GridBagConstraints gbc) {
+	public JMenuItem getItemGestionClients() {
 		if (itemGestionClients == null) {
 			itemGestionClients = new JMenuItem("Gestion des clients");
 			itemGestionClients.addActionListener(new ActionListener() {
@@ -187,7 +189,7 @@ public class EcranAccueil extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 
 					getContentPane().removeAll();
-					getContentPane().add(getPanelClients(), gbc);
+					getContentPane().add(getPanelClients());
 					getContentPane().revalidate();
 				}
 			});

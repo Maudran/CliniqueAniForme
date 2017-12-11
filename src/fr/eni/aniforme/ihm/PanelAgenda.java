@@ -1,5 +1,7 @@
 package fr.eni.aniforme.ihm;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -14,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
 import fr.eni.aniforme.bll.BLLException;
 import fr.eni.aniforme.bll.PersonnelManager;
 import fr.eni.aniforme.bo.Personnel;
@@ -28,9 +29,14 @@ public class PanelAgenda extends JPanel {
 	private JButton btnDossierMedical;
 	private JComboBox<String> cboVeterinaire;
 	PersonnelManager personnelManager = PersonnelManager.getInstance();
-	private JScrollPane tableAgenda;
+	private JScrollPane agendaScrollPane;
 	private JTable tableau;
 	private TableAgendaModel model;
+	private UtilDateModel modelDp;
+	private JDatePanelImpl datePanel;
+	private JDatePickerImpl dpCalendar;
+	private JPanel panelVeterinaireDate;
+	private JPanel panelDossierMedical;
 
 	public JLabel getLblVeterinaire() {
 		if (lblVeterinaire == null) {
@@ -86,11 +92,11 @@ public class PanelAgenda extends JPanel {
 		return cboVeterinaire;
 	}
 
-	public JScrollPane getTableAgenda() {
-		if (tableAgenda == null) {
-			tableAgenda = new JScrollPane(getTableau());
+	public JScrollPane getAgendaScrollPane() {
+		if (agendaScrollPane == null) {
+			agendaScrollPane = new JScrollPane(getTableau());
 		}
-		return tableAgenda;
+		return agendaScrollPane;
 	}
 
 	public TableAgendaModel getModel() {
@@ -107,35 +113,62 @@ public class PanelAgenda extends JPanel {
 		return tableau;
 	}
 
+	public UtilDateModel getModelDp() {
+		if (modelDp == null) {
+			modelDp = new UtilDateModel();
+			modelDp.setValue(new Date());
+		}
+		return modelDp;
+	}
+
+	public JDatePanelImpl getDatePanel() {
+		if (datePanel == null) {
+			datePanel = new JDatePanelImpl(getModelDp());
+		}
+		return datePanel;
+	}
+
+	public JDatePickerImpl getDpCalendar() {
+		if (dpCalendar == null) {
+			dpCalendar = new JDatePickerImpl(getDatePanel());
+
+		}
+		return dpCalendar;
+	}
+
+	public JPanel getPanelVeterinaireDate() {
+		if (panelVeterinaireDate == null) {
+			panelVeterinaireDate = new JPanel();
+			panelVeterinaireDate.add(getLblVeterinaire());
+			panelVeterinaireDate.add(getCboVeterinaire());
+			panelVeterinaireDate.add(getLblDate());
+			panelVeterinaireDate.add(getDpCalendar());
+		
+
+		}
+
+		return panelVeterinaireDate;
+	}
+
+	public JPanel getPanelDossierMedical() {
+		if (panelDossierMedical == null) {
+			panelDossierMedical = new JPanel();
+			panelDossierMedical.add(getBtnDossierMedical());
+		}
+		return panelDossierMedical;
+	}
+
 	public PanelAgenda() {
-		setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
 
-		UtilDateModel model = new UtilDateModel();
-		model.setValue(new Date());
-		JDatePanelImpl datePanel = new JDatePanelImpl(model);
-		JDatePickerImpl dpCalendar = new JDatePickerImpl(datePanel);
+		setLayout(new BorderLayout());
 
-		gbc.gridy = 0;
-		gbc.gridx = 0;
-		add(getLblVeterinaire(), gbc);
+		add(getPanelVeterinaireDate(), BorderLayout.NORTH);
+		
+		add(getAgendaScrollPane(), BorderLayout.CENTER);
 
-		gbc.gridy = 0;
-		gbc.gridx = 1;
-		add(getCboVeterinaire(), gbc);
+		add(getPanelDossierMedical(), BorderLayout.SOUTH);
 
-		gbc.gridy = 0;
-		gbc.gridx = 2;
-		add(getLblDate(), gbc);
-
-		gbc.gridy = 0;
-		gbc.gridx = 4;
-		add(dpCalendar, gbc);
-
-		gbc.gridy = 8;
-		gbc.gridx = 5;
-		add(getBtnDossierMedical(), gbc);
-
+	
 	}
 
 }

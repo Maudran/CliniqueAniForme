@@ -1,5 +1,6 @@
 package fr.eni.aniforme.ihm;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -24,16 +25,12 @@ public class PanelGestionPersonnel extends JPanel {
 	private TableEmployesModel tableauModel;
 	
 	public PanelGestionPersonnel() {
-		setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(2, 5, 2, 5);
+		
+		setLayout(new BorderLayout());
+		
+		add(getPanelButtons(), BorderLayout.NORTH);
 
-		gbc.gridy = 0;
-		gbc.gridx = 0;
-		add(getPanelButtons(), gbc);
-
-		gbc.gridy = 1;
-		add(getTableauScrollPane(), gbc);
+		add(getTableauScrollPane(), BorderLayout.CENTER);
 
 
 	}
