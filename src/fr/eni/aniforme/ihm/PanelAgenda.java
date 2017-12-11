@@ -44,19 +44,20 @@ public class PanelAgenda extends JPanel {
 	public JButton getBtnDossierMedical() {
 		if (btnDossierMedical == null) {
 			btnDossierMedical = new JButton("Dossier Médical");
-		}
-		btnDossierMedical.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrame frameDossierMedical = new JFrame("Dossier Médical");
-				frameDossierMedical.setVisible(true);
-				frameDossierMedical.pack();
-				frameDossierMedical.setSize(800, 500);
-				frameDossierMedical.setLocationRelativeTo(null);
+			btnDossierMedical.addActionListener(new ActionListener() {
 				
-			}
-		});
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JFrame frameDossierMedical = new JFrame("Dossier Médical");
+					frameDossierMedical.setVisible(true);
+					frameDossierMedical.pack();
+					frameDossierMedical.setSize(800, 500);
+					frameDossierMedical.setLocationRelativeTo(null);
+					
+				}
+			});
+		}
+	
 		return btnDossierMedical;
 	}
 

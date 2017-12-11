@@ -52,6 +52,8 @@ public class PanelGestionPersonnel extends JPanel {
 
 				jop1 = new JOptionPane();
 				JOptionPane.showMessageDialog(jop1, "Confirmez vous l'archivage");
+				JOptionPane.YES_NO_CANCEL_OPTION;
+				
 			
 
 			}

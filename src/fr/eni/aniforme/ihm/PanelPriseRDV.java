@@ -27,13 +27,10 @@ public class PanelPriseRDV extends JPanel {
 	private JButton btnSupprimer, btnValider, btnAjouter;
 	private JComboBox<String> cboVeterinaire, cboClient, cboAnimal, cboHeure, cboMinute;
 	private JScrollPane tableAgenda;
-	
+
 	PersonnelManager personnelManager = PersonnelManager.getInstance();
 	ClientManager clientManager = ClientManager.getInstance();
-	
-	
-	
-	
+
 	public PanelPriseRDV() {
 		setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -41,60 +38,51 @@ public class PanelPriseRDV extends JPanel {
 		gbc.gridy = 0;
 		gbc.gridx = 0;
 		add(getLblClient(), gbc);
-		
+
 		gbc.gridy = 1;
 		gbc.gridx = 0;
-		add (getCboClient(), gbc);
-		
+		add(getCboClient(), gbc);
+
 		gbc.gridy = 1;
 		gbc.gridx = 1;
-		add (getBtnAjouter(), gbc);
-		
+		add(getBtnAjouter(), gbc);
+
 		gbc.gridy = 2;
 		gbc.gridx = 0;
 		add(getLblAnimal(), gbc);
-		
+
 		gbc.gridy = 3;
 		gbc.gridx = 0;
-		add (getCboAnimal(), gbc);
-		
+		add(getCboAnimal(), gbc);
+
 		gbc.gridy = 3;
 		gbc.gridx = 1;
-		add (getBtnAjouter(), gbc);
-		
+		add(getBtnAjouter(), gbc);
+
 		gbc.gridy = 0;
 		gbc.gridx = 2;
-		add (getLblVeterinaire(),gbc);
-		
+		add(getLblVeterinaire(), gbc);
+
 		gbc.gridy = 1;
 		gbc.gridx = 2;
-		add (getCboVeterinaire(), gbc);
-		
+		add(getCboVeterinaire(), gbc);
+
 		gbc.gridy = 0;
 		gbc.gridx = 3;
-		add (getLblDate(),gbc);
-		
-//		gbc.gridy = 1;
-//		gbc.gridx = 3;
-//		add(dpCalendar, gbc);
-		
+		add(getLblDate(), gbc);
+
+		// gbc.gridy = 1;
+		// gbc.gridx = 3;
+		// add(dpCalendar, gbc);
+
 		gbc.gridy = 2;
 		gbc.gridx = 3;
-		add (getLblHeure(),gbc);
-		
+		add(getLblHeure(), gbc);
+
 		gbc.gridy = 2;
 		gbc.gridx = 4;
-		add (getLblMinute(),gbc);
+		add(getLblMinute(), gbc);
 	}
-		
-		
-		
-		
-//		UtilDateModel model = new UtilDateModel();
-//		model.setValue(new Date());
-//		JDatePanelImpl datePanel = new JDatePanelImpl(model);
-//		JDatePickerImpl dpCalendar = new JDatePickerImpl(datePanel);
-//	}
 
 	public JLabel getLblClient() {
 		if (lblClient == null) {
@@ -151,7 +139,7 @@ public class PanelPriseRDV extends JPanel {
 		}
 		return btnValider;
 	}
-	
+
 	public JButton getBtnAjouter() {
 		if (btnAjouter == null) {
 			btnAjouter = new JButton("+");
@@ -202,7 +190,7 @@ public class PanelPriseRDV extends JPanel {
 		List<Animal> choixAnimal;
 		if (cboAnimal == null) {
 			if (getCboClient().getSelectedItem() != null) {
-				choixAnimal = ((Client)getCboClient().getSelectedItem()).getAnimaux();
+				choixAnimal = ((Client) getCboClient().getSelectedItem()).getAnimaux();
 				for (Animal animal : choixAnimal) {
 					animaux.add(animal.getNom());
 				}
@@ -215,26 +203,23 @@ public class PanelPriseRDV extends JPanel {
 
 	public JComboBox<String> getCboHeure() {
 		if (cboHeure == null) {
-			cboHeure = new JComboBox<String>(new String[] {"09","10","11","13","14","15","16","17"});
+			cboHeure = new JComboBox<String>(new String[] { "09", "10", "11", "13", "14", "15", "16", "17" });
 		}
 		return cboHeure;
 	}
 
 	public JComboBox<String> getCboMinute() {
 		if (cboMinute == null) {
-			cboMinute = new JComboBox<String>(new String[] {"00","15","30","45"});
+			cboMinute = new JComboBox<String>(new String[] { "00", "15", "30", "45" });
 		}
 		return cboMinute;
 	}
 
 	public JScrollPane getTableAgenda() {
 		if (tableAgenda == null) {
-			
+
 		}
 		return tableAgenda;
 	}
 
 }
-
-
-
