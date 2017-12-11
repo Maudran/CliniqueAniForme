@@ -2,19 +2,16 @@ package fr.eni.aniforme.ihm;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import fr.eni.aniforme.bll.AgendaManager;
 import fr.eni.aniforme.bll.AnimalManager;
 import fr.eni.aniforme.bll.BLLException;
 import fr.eni.aniforme.bll.ClientManager;
 import fr.eni.aniforme.bo.Animal;
 import fr.eni.aniforme.bo.Client;
-import fr.eni.aniforme.bo.RdvAffichage;
 
 public class TableAnimauxModel extends AbstractTableModel {
 
@@ -71,33 +68,30 @@ public class TableAnimauxModel extends AbstractTableModel {
 
 		return result;
 	}
-	
+
 	public Animal getValueAt(int rowIndex) {
 		return animaux.get(rowIndex);
 	}
 
 	public void updateData() {
-		
+
 		try {
-			
+
 			List<Client> clients = clientManager.getClients();
-			animaux = clientManager.getClientWithAnimals(3).getAnimaux();
+			animaux = clientManager.getClientWithAnimals(clients.get(0).getCodeClient()).getAnimaux();
 			fireTableDataChanged();
 		} catch (BLLException e) {
 			e.printStackTrace();
 		}
 
 	}
-	
-	public void updateVeterinaire(String nom, Date date) 
-	{
-	
-		
-	}
-	
-	public void updateDate(Date date)
-	{
-		
+
+	public void updateClient(Client client) {
+		try {
+			animaux = animalManager.getAnimauxClient(client);
+		} catch (BLLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

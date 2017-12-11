@@ -280,4 +280,10 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 		return null;
 	}
 
+	@Override
+	public List<Animal> selectByClient(Client client) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

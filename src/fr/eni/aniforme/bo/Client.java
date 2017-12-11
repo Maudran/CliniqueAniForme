@@ -27,6 +27,7 @@ public class Client {
 	public void addAnimal(Animal animal)
 	{
 		getAnimaux().add(animal);
+		animal.setClient(this);
 	}
 
 	public Integer getCodeClient() {
@@ -132,26 +133,40 @@ public class Client {
 	public void setArchive(boolean archive) {
 		this.archive = archive;
 	}
-
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Client [CodeClient=");
-		builder.append(codeClient);
-		builder.append(", nom=");
-		builder.append(nom);
-		builder.append(", prenom=");
+		builder.append(nom.toUpperCase());
+		builder.append(" - ");
 		builder.append(prenom);
+		builder.append(" - ");
+		builder.append(codePostal);
+		builder.append(" - ");
+		builder.append(ville);
 		
-		if(animaux.size() > 0) {
-			builder.append(", animaux=[");
-			for(Animal a : animaux) {
-				builder.append("\n\t\t").append(a);
-			}
-		}
-		
-		builder.append("\n]");
 		return builder.toString();
 	}
+
+//	@Override
+//	public String toString() {
+//		StringBuilder builder = new StringBuilder();
+//		builder.append("Client [CodeClient=");
+//		builder.append(codeClient);
+//		builder.append(", nom=");
+//		builder.append(nom);
+//		builder.append(", prenom=");
+//		builder.append(prenom);
+//		
+//		if(animaux.size() > 0) {
+//			builder.append(", animaux=[");
+//			for(Animal a : animaux) {
+//				builder.append("\n\t\t").append(a);
+//			}
+//		}
+//		
+//		builder.append("\n]");
+//		return builder.toString();
+//	}
 
 }

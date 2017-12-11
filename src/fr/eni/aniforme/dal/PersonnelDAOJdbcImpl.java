@@ -268,4 +268,10 @@ public class PersonnelDAOJdbcImpl implements DAO<Personnel> {
 		return null;
 	}
 
+	@Override
+	public List<Animal> selectByClient(Client client) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

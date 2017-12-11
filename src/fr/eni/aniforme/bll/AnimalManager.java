@@ -3,6 +3,7 @@ package fr.eni.aniforme.bll;
 import java.util.List;
 
 import fr.eni.aniforme.bo.Animal;
+import fr.eni.aniforme.bo.Client;
 import fr.eni.aniforme.dal.DALException;
 import fr.eni.aniforme.dal.DAO;
 import fr.eni.aniforme.dal.DAOFactory;
@@ -28,6 +29,15 @@ public class AnimalManager {
 			return animalDAO.selectAll();
 		} catch (DALException e) {
 			throw new BLLException("Erreur à la récupération de la liste des animaux", e);
+		}
+	}
+	
+	public List<Animal> getAnimauxClient(Client client) throws BLLException
+	{
+		try {
+			return animalDAO.selectByClient(client);
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la récupération des animaux d'un client", e);
 		}
 	}
 

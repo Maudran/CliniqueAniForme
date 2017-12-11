@@ -309,4 +309,10 @@ public class ClientDAOJdbcImpl implements DAO<Client> {
 		return null;
 	}
 
+	@Override
+	public List<Animal> selectByClient(Client client) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

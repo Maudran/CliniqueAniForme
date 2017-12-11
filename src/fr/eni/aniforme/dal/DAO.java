@@ -40,4 +40,6 @@ public interface DAO<T> {
 
 	List<Rdv> selectAgendaVet(String nom, Date date) throws DALException;
 
+	List<Animal> selectByClient(Client client) throws DALException;
+
 }
