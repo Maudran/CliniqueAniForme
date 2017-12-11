@@ -23,6 +23,7 @@ public class PanelGestionPersonnel extends JPanel {
 	private JScrollPane tableauScrollPane;
 	private JTable tableau;
 	private TableEmployesModel tableauModel;
+	private EcranAjoutClient ecranAjoutClient;
 	
 	public PanelGestionPersonnel() {
 		
@@ -60,9 +61,8 @@ public class PanelGestionPersonnel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFrame frameSupprimerEmploye = new JFrame("Archivage d'un employé");
-				frameSupprimerEmploye.setVisible(true);
-				frameSupprimerEmploye.pack();
+				getEcranAjoutClient();
+				getEcranAjoutClient().setVisible(true);
 				
 			}
 		});
@@ -118,6 +118,13 @@ public class PanelGestionPersonnel extends JPanel {
 		}
 		return panelButtons;
 
+	}
+
+	public EcranAjoutClient getEcranAjoutClient() {
+		if (ecranAjoutClient == null) {
+			ecranAjoutClient = new EcranAjoutClient();
+		}
+		return ecranAjoutClient;
 	}
 
 

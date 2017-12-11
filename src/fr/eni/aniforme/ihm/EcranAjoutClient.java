@@ -4,4 +4,6 @@ import javax.swing.JFrame;
 
 public class EcranAjoutClient extends JFrame {
 
+	//pack()
+	
 }
