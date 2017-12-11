@@ -103,26 +103,23 @@ public class PanelAgenda extends JPanel {
 
 		gbc.gridy = 0;
 		gbc.gridx = 0;
-//		add(getLblVeterinaire(), gbc);
-//
-//		gbc.gridy = 0;
-//		gbc.gridx = 1;
-//		add(getCboVeterinaire(), gbc);
-//
-//		gbc.gridy = 0;
-//		gbc.gridx = 2;
-//		add(getLblDate(), gbc);
-//
-//		gbc.gridy = 0;
-//		gbc.gridx = 4;
-//		add(dpCalendar, gbc);
-//		
-//		gbc.gridy = 1;
-		add(getTableAgenda(), gbc);
+		add(getLblVeterinaire(), gbc);
 
-//		gbc.gridy = 2;
-//		gbc.gridx = 5;
-//		add(getBtnDossierMedical(), gbc);
+		gbc.gridy = 0;
+		gbc.gridx = 1;
+		add(getCboVeterinaire(), gbc);
+
+		gbc.gridy = 0;
+		gbc.gridx = 2;
+		add(getLblDate(), gbc);
+
+		gbc.gridy = 0;
+		gbc.gridx = 4;
+		add(dpCalendar, gbc);
+
+		gbc.gridy = 8;
+		gbc.gridx = 5;
+		add(getBtnDossierMedical(), gbc);
 
 	}
 

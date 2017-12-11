@@ -1,6 +1,5 @@
 package fr.eni.aniforme.bll;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,7 +14,6 @@ import fr.eni.aniforme.bo.RdvAffichage;
 import fr.eni.aniforme.dal.DALException;
 import fr.eni.aniforme.dal.DAO;
 import fr.eni.aniforme.dal.DAOFactory;
-import fr.eni.aniforme.dal.RDVDAOJdbcImpl;
 
 public class AgendaManager {
 
