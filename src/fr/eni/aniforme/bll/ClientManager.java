@@ -81,6 +81,15 @@ public class ClientManager {
 			throw new BLLException("Erreur à la récupération d'un client et ses animaux : " + id, e);
 		}
 	}
+	
+	public List<Client> getClientsWithAnimals() throws BLLException
+	{
+		try {
+			return clientDAO.selectAllWithAnimals();
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la récupération des client et leurs animaux", e);
+		}
+	}
 
 	public void validerClient(Client client) throws BLLException {
 		if (isNullOrEmpty(client.getNom())) {

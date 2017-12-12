@@ -2,6 +2,7 @@ package fr.eni.aniforme.ihm;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -11,30 +12,36 @@ import java.awt.event.ActionEvent;
 
 public class DialogConnexion extends JDialog {
 
-	private JTextField textNom, textMotPasse;
+	private JTextField textNom;
+	private JPasswordField textMotPasse;
 	private JLabel labelNom, labelMotPasse;
 	private JButton btnValider;
-
-	public DialogConnexion() {
-		initialize();
+	
+	public interface ConnexionListener 
+	{
+		void checkConnexion(String nom, String motPasse);
 	}
+	
+	private ConnexionListener listener;
 
-	private void initialize() {
-
-		this.setTitle("Connexion");
-		this.setBounds(100, 100, 289, 184);
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		this.setLocationRelativeTo(null);
-		this.getContentPane().setLayout(null);
+	public DialogConnexion(ConnexionListener listener) {
+		
+		this.listener = listener;
+		
+		setTitle("Connexion");
+		setBounds(100, 100, 289, 184);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		setLocationRelativeTo(null);
+		getContentPane().setLayout(null);
 
 		
-		this.getContentPane().add(getLabelNom());
-		this.getContentPane().add(getLabelMotPasse());
+		getContentPane().add(getLabelNom());
+		getContentPane().add(getLabelMotPasse());
 
-		this.getContentPane().add(getTextNom());
-		this.getContentPane().add(getTextMotPasse());
+		getContentPane().add(getTextNom());
+		getContentPane().add(getTextMotPasse());
 		
-		this.getContentPane().add(getBtnValider());
+		getContentPane().add(getBtnValider());
 	}
 
 	public JTextField getTextNom() {
@@ -46,9 +53,9 @@ public class DialogConnexion extends JDialog {
 		return textNom;
 	}
 
-	public JTextField getTextMotPasse() {
+	public JPasswordField getTextMotPasse() {
 		if (textMotPasse == null) {
-			textMotPasse = new JTextField();
+			textMotPasse = new JPasswordField();
 			textMotPasse.setBounds(111, 72, 128, 20);
 			textMotPasse.setColumns(10);
 		}
@@ -77,11 +84,12 @@ public class DialogConnexion extends JDialog {
 			btnValider.setBounds(153, 111, 89, 23);
 			btnValider.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					listener.checkConnexion(getTextNom().getText(), getTextMotPasse().getPassword().toString());
 				}
 			});
 		}
 		return btnValider;
 	}
+
 
 }

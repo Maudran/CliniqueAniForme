@@ -81,6 +81,26 @@ public class PersonnelDAOJdbcImpl implements DAO<Personnel> {
 		}
 
 	}
+	
+	@Override
+	public Personnel connexionPersonnel(String nom, String motPasse) throws DALException
+	{
+		openConnection();
+
+		String sql = "SELECT * FROM Personnels where motpasse = ? AND nom LIKE '%'+?+'%' AND archive = 0";
+
+		try {
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, motPasse);
+			statement.setString(2, nom);
+			ResultSet resultSet = statement.executeQuery();
+			if (resultSet.next())
+				return getPersonnelFromResultset(resultSet);
+			return null;
+		} catch (SQLException e) {
+			throw new DALException("Erreur à la connexion d'un personnel : " + nom, e);
+		}
+	}
 
 	@Override
 	public Personnel selectById(int id) throws DALException {

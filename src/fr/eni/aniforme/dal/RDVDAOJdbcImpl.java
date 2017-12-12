@@ -286,4 +286,10 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 		return null;
 	}
 
+	@Override
+	public Personnel connexionPersonnel(String nom, String motPasse) throws DALException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

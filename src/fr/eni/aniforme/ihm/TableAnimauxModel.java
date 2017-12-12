@@ -89,6 +89,7 @@ public class TableAnimauxModel extends AbstractTableModel {
 	public void updateClient(Client client) {
 		try {
 			animaux = animalManager.getAnimauxClient(client);
+			fireTableDataChanged();
 		} catch (BLLException e) {
 			e.printStackTrace();
 		}

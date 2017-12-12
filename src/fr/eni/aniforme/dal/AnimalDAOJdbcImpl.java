@@ -304,4 +304,9 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 		return null;
 	}
 
+	@Override
+	public Personnel connexionPersonnel(String nom, String motPasse) throws DALException {
+		return null;
+	}
+
 }

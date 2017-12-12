@@ -12,6 +12,7 @@ import java.util.List;
 
 import fr.eni.aniforme.bo.Animal;
 import fr.eni.aniforme.bo.Client;
+import fr.eni.aniforme.bo.Personnel;
 import fr.eni.aniforme.bo.Rdv;
 
 public class ClientDAOJdbcImpl implements DAO<Client> {
@@ -311,6 +312,12 @@ public class ClientDAOJdbcImpl implements DAO<Client> {
 
 	@Override
 	public List<Animal> selectByClient(Client client) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Personnel connexionPersonnel(String nom, String motPasse) throws DALException {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 
 import fr.eni.aniforme.bo.Animal;
 import fr.eni.aniforme.bo.Client;
+import fr.eni.aniforme.bo.Personnel;
 import fr.eni.aniforme.bo.Rdv;
 
 public interface DAO<T> {
@@ -41,5 +42,7 @@ public interface DAO<T> {
 	List<Rdv> selectAgendaVet(String nom, Date date) throws DALException;
 
 	List<Animal> selectByClient(Client client) throws DALException;
+
+	Personnel connexionPersonnel(String nom, String motPasse) throws DALException;
 
 }

@@ -22,6 +22,24 @@ public class PersonnelManager {
 		}
 		return instance;
 	}
+	
+	public Personnel getEmployeById(int id) throws BLLException
+	{
+		try {
+			return personnelDAO.selectById(id);
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la récupération d'un employé par id : " + id, e);
+		}
+	}
+	
+	public Personnel getEmployeByNom(String nom) throws BLLException
+	{
+		try {
+			return personnelDAO.selectByNom(nom);
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la récupération d'un employé par nom : " + nom, e);
+		}
+	}
 
 	public List<Personnel> getEmployes() throws BLLException {
 		try {
@@ -62,6 +80,15 @@ public class PersonnelManager {
 			personnelDAO.delete(codePers);
 		} catch (DALException e) {
 			throw new BLLException("Erreur à l'archivage d'un employé, id : " + codePers, e);
+		}
+	}
+	
+	public Personnel connexionEmploye(String nom, String motPasse) throws BLLException
+	{
+		try {
+			return personnelDAO.connexionPersonnel(nom, motPasse);
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la connexion d'un employé, nom : " + nom, e);
 		}
 	}
 

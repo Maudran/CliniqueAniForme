@@ -35,15 +35,9 @@ public class AgendaManager {
 		return instance;
 	}
 
-	public void insertRdv(Animal animal, Date date, String nomVeto) throws BLLException {
-
-		Rdv rdv = new Rdv();
+	public void insertRdv(Rdv rdv) throws BLLException {
 
 		try {
-			rdv.setCodeVeterinaire(personnelDAO.selectByNom(nomVeto).getCodePers());
-			rdv.setCodeAnimal(animal.getCodeAnimal());
-			rdv.setDateRdv(date);
-
 			validerRdv(rdv);
 			agendaDAO.insert(rdv);
 		} catch (DALException e) {
@@ -60,19 +54,51 @@ public class AgendaManager {
 	}
 
 	public List<Rdv> getAgendaVeto(String nomVeto, Date date) throws BLLException {
+		List<Rdv> agenda;
+		List<Rdv> agendaAffichage = new ArrayList<Rdv>();
 		try {
-			return agendaDAO.selectAgendaVet(nomVeto, date);
+			agenda = agendaDAO.selectListByNom(nomVeto);
+			calendar.setTime(date);
+			int annee = calendar.get(Calendar.YEAR);
+			int mois = calendar.get(Calendar.MONTH);
+			int jour = calendar.get(Calendar.DAY_OF_MONTH);
+
+			for (Rdv rdv : agenda) {
+				calendar.setTime(rdv.getDateRdv());
+				if (calendar.get(Calendar.YEAR) == annee && calendar.get(Calendar.MONTH) == mois
+						&& calendar.get(Calendar.DAY_OF_MONTH) == jour) {
+
+					agendaAffichage.add(rdv);
+				}
+			}
 		} catch (DALException e) {
-			throw new BLLException("Erreur à la récupération de l'agenda d'un vétérinaire : " + nomVeto, e);
+			throw new BLLException("Erreur à la récupération de l'agenda par veto : " + nomVeto, e);
 		}
+		return agendaAffichage;
 	}
 
 	public List<Rdv> getAgendaByDate(Date date) throws BLLException {
+		List<Rdv> agenda;
+		List<Rdv> agendaAffichage = new ArrayList<Rdv>();
 		try {
-			return agendaDAO.selectByDate(date);
+			agenda = agendaDAO.selectAll();
+			calendar.setTime(date);
+			int annee = calendar.get(Calendar.YEAR);
+			int mois = calendar.get(Calendar.MONTH);
+			int jour = calendar.get(Calendar.DAY_OF_MONTH);
+
+			for (Rdv rdv : agenda) {
+				calendar.setTime(rdv.getDateRdv());
+				if (calendar.get(Calendar.YEAR) == annee && calendar.get(Calendar.MONTH) == mois
+						&& calendar.get(Calendar.DAY_OF_MONTH) == jour) {
+
+					agendaAffichage.add(rdv);
+				}
+			}
 		} catch (DALException e) {
 			throw new BLLException("Erreur à la récupération de l'agenda par date : " + date, e);
 		}
+		return agendaAffichage;
 	}
 
 	public List<RdvAffichage> getRdvAffichageDate(Date date) throws BLLException {

@@ -136,16 +136,8 @@ public class Client {
 	
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append(nom.toUpperCase());
-		builder.append(" - ");
-		builder.append(prenom);
-		builder.append(" - ");
-		builder.append(codePostal);
-		builder.append(" - ");
-		builder.append(ville);
 		
-		return builder.toString();
+		return nom + " " + prenom;
 	}
 
 //	@Override

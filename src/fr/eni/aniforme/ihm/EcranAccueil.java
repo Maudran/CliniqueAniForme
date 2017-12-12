@@ -1,33 +1,37 @@
 package fr.eni.aniforme.ihm;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.List;
+
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+
+import fr.eni.aniforme.bll.BLLException;
+import fr.eni.aniforme.bll.PersonnelManager;
+import fr.eni.aniforme.bo.Personnel;
+import fr.eni.aniforme.ihm.DialogConnexion.ConnexionListener;
+
 import javax.swing.JMenu;
 
-public class EcranAccueil extends JFrame {
+public class EcranAccueil extends JFrame implements ConnexionListener {
 
 	private JMenuBar menuBar;
 	private JMenu menuFichier, menuGestionRdv, menuAgenda, menuGestionPersonnel;
-	private JMenuItem itemDeconnexion, itemFermer, itemPriseRdv, itemGestionClients;
+	private JMenuItem itemDeconnexion, itemFermer, itemPriseRdv, itemGestionClients, itemAgenda, itemGestionPersonnel;
 	private PanelClients panelClients;
 	private PanelGestionPersonnel panelGestionPersonnel;
 	private PanelPriseRDV panelPriseRDV;
 	private PanelAgenda panelAgenda;
+	private DialogConnexion dialogConnexion;
+
+	PersonnelManager personnelManager = PersonnelManager.getInstance();
 
 	public EcranAccueil() {
 		initialize();
@@ -39,6 +43,38 @@ public class EcranAccueil extends JFrame {
 		setSize(800, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+		setEnabled(false);
+		addWindowListener(new WindowListener() {
+
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				openDialogConnexion();
+			}
+
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+			}
+
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+			}
+		});
 
 		getMenuFichier().add(getItemDeconnexion());
 		getMenuFichier().add(getItemFermer());
@@ -82,30 +118,7 @@ public class EcranAccueil extends JFrame {
 	public JMenu getMenuAgenda() {
 		if (menuAgenda == null) {
 			menuAgenda = new JMenu("Agenda");
-			menuAgenda.addMenuListener(new MenuListener() {
-
-				@Override
-				public void menuSelected(MenuEvent e) {
-					getContentPane().removeAll();
-					getContentPane().add(getPanelAgenda());
-					getContentPane().revalidate();
-				}
-
-				@Override
-				public void menuDeselected(MenuEvent e) {
-				}
-
-				@Override
-				public void menuCanceled(MenuEvent e) {
-				}
-			});
-			menuAgenda.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					System.out.println("Hellllowwwww!!!");
-				}
-			});
+			menuAgenda.add(getItemAgenda());
 		}
 		return menuAgenda;
 	}
@@ -113,24 +126,7 @@ public class EcranAccueil extends JFrame {
 	public JMenu getMenuGestionPersonnel() {
 		if (menuGestionPersonnel == null) {
 			menuGestionPersonnel = new JMenu("Gestion du personnel");
-			menuGestionPersonnel.addMenuListener(new MenuListener() {
-
-				@Override
-				public void menuSelected(MenuEvent e) {
-					getContentPane().removeAll();
-					getContentPane().add(getPanelGestionPersonnel());
-					revalidate();
-					repaint();
-				}
-
-				@Override
-				public void menuDeselected(MenuEvent e) {
-				}
-
-				@Override
-				public void menuCanceled(MenuEvent e) {
-				}
-			});
+			menuGestionPersonnel.add(getItemGestionPersonnel());
 		}
 		return menuGestionPersonnel;
 	}
@@ -197,6 +193,47 @@ public class EcranAccueil extends JFrame {
 		return itemGestionClients;
 	}
 
+	public JMenuItem getItemAgenda() {
+		if (itemAgenda == null) {
+			itemAgenda = new JMenuItem("Agenda");
+			itemAgenda.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					List<Personnel> veterinaires;
+					try {
+						veterinaires = personnelManager.getVeterinaires();
+						getContentPane().removeAll();
+						getContentPane().add(getPanelAgenda(veterinaires.get(0).getNom()));
+						getContentPane().revalidate();
+						repaint();
+					} catch (BLLException e1) {
+						e1.printStackTrace();
+					}
+
+				}
+			});
+		}
+		return itemAgenda;
+	}
+
+	public JMenuItem getItemGestionPersonnel() {
+		if (itemGestionPersonnel == null) {
+			itemGestionPersonnel = new JMenuItem("Gestion du personnel");
+			itemGestionPersonnel.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					getContentPane().removeAll();
+					getContentPane().add(getPanelGestionPersonnel());
+					revalidate();
+					repaint();
+				}
+			});
+		}
+		return itemGestionPersonnel;
+	}
+
 	public PanelClients getPanelClients() {
 		if (panelClients == null) {
 			panelClients = new PanelClients();
@@ -205,9 +242,9 @@ public class EcranAccueil extends JFrame {
 		return panelClients;
 	}
 
-	public PanelAgenda getPanelAgenda() {
+	public PanelAgenda getPanelAgenda(String nomVeto) {
 		if (panelAgenda == null) {
-			panelAgenda = new PanelAgenda();
+			panelAgenda = new PanelAgenda(nomVeto);
 			this.setTitle("Agenda");
 		}
 		return panelAgenda;
@@ -215,7 +252,7 @@ public class EcranAccueil extends JFrame {
 
 	public PanelPriseRDV getPanelPriseRDV() {
 		if (panelPriseRDV == null) {
-			panelPriseRDV = new PanelPriseRDV();
+			panelPriseRDV = new PanelPriseRDV(EcranAccueil.this);
 			this.setTitle("Prise de RDV");
 		}
 		return panelPriseRDV;
@@ -223,10 +260,65 @@ public class EcranAccueil extends JFrame {
 
 	public PanelGestionPersonnel getPanelGestionPersonnel() {
 		if (panelGestionPersonnel == null) {
-			panelGestionPersonnel = new PanelGestionPersonnel();
+			panelGestionPersonnel = new PanelGestionPersonnel(EcranAccueil.this);
 			this.setTitle("Gestion du personnel");
 		}
 		return panelGestionPersonnel;
+	}
+	
+	private void openDialogConnexion() {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				if(dialogConnexion == null) {
+					dialogConnexion = new DialogConnexion(EcranAccueil.this);
+					dialogConnexion.setVisible(true);
+				}
+			}
+		});
+		
+	}
+
+	@Override
+	public void checkConnexion(String nom, String motPasse) {
+
+		try {
+			Personnel employe = personnelManager.connexionEmploye(nom, motPasse);
+
+			if (employe != null && dialogConnexion != null) {
+				
+				dialogConnexion.dispose();
+				this.setEnabled(true);
+				
+				if (employe.getRole().equalsIgnoreCase("vet")) {
+					getContentPane().removeAll();
+					getContentPane().add(getPanelAgenda(employe.getNom()));
+					getContentPane().revalidate();
+					repaint();
+					
+					getMenuGestionPersonnel().setEnabled(false);
+					getMenuGestionRdv().setEnabled(false);
+				}
+				else if (employe.getRole().equalsIgnoreCase("sec")) {
+					getContentPane().removeAll();
+					getContentPane().add(getPanelPriseRDV());
+					getContentPane().revalidate();
+					repaint();
+					
+					getMenuGestionPersonnel().setEnabled(false);
+					
+				} else if (employe.getRole().equalsIgnoreCase("admin"))
+				{
+					getContentPane().removeAll();
+					getContentPane().add(getPanelGestionPersonnel());
+					getContentPane().revalidate();
+					repaint();
+				}
+			}
+		} catch (BLLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

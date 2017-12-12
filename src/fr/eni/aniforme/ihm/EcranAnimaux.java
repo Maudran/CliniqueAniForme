@@ -17,6 +17,8 @@ import javax.swing.border.Border;
 
 import fr.eni.aniforme.bll.AnimalManager;
 import fr.eni.aniforme.bll.BLLException;
+import fr.eni.aniforme.bo.Animal;
+import fr.eni.aniforme.bo.Client;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -34,7 +36,7 @@ public class EcranAnimaux extends JFrame {
 	
 	private AnimalManager animalManager = AnimalManager.getInstance();
 
-	public EcranAnimaux(String nomClient, int codeAnimal) {
+	public EcranAnimaux(Client client, Animal animal) {
 		
 		this.setTitle("Animaux");
 		this.setSize(800, 500);
@@ -44,7 +46,7 @@ public class EcranAnimaux extends JFrame {
 		
 		Box boxClient = Box.createHorizontalBox();
 		boxClient.add(getLabelClient());
-		getNomClient().setText(nomClient);
+		getNomClient().setText(client.getNom()+" "+client.getPrenom());
 		boxClient.add(getNomClient());
 		getContentPane().add(boxClient);
 		
@@ -59,7 +61,7 @@ public class EcranAnimaux extends JFrame {
 		panelChamps.add(getLabelCode());
 		
 		gbc.gridx = 1;
-		getCodeAnimal().setText(Integer.toString(codeAnimal));
+		getCodeAnimal().setText(Integer.toString(animal.getCodeAnimal()));
 		panelChamps.add(getCodeAnimal());
 		
 		gbc.gridy = 1;
@@ -100,6 +102,72 @@ public class EcranAnimaux extends JFrame {
 		
 		getContentPane().add(getPanelButtons());
 
+	}
+	
+	public EcranAnimaux(Client client) {
+		this.setTitle("Animaux");
+		this.setSize(800, 500);
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		getContentPane().setLayout(new GridLayout());
+		
+		Box boxClient = Box.createHorizontalBox();
+		boxClient.add(getLabelClient());
+		getNomClient().setText(client.getNom()+" "+client.getPrenom());
+		boxClient.add(getNomClient());
+		getContentPane().add(boxClient);
+		
+		JPanel panelChamps = new JPanel();
+		panelChamps.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(2, 5, 2, 5);
+
+		gbc.gridy = 0;
+		gbc.gridx = 0;
+		panelChamps.add(getLabelCode());
+		
+		gbc.gridx = 1;
+		getCodeAnimal().setText("");
+		panelChamps.add(getCodeAnimal());
+		
+		gbc.gridy = 1;
+		gbc.gridx = 0;
+		panelChamps.add(getLabelNomAnimal());
+		
+		gbc.gridx = 1;
+		panelChamps.add(getTextNomAnimal());
+		
+		gbc.gridy = 2;
+		gbc.gridx = 0;
+		panelChamps.add(getLabelCouleur());
+		
+		gbc.gridx = 1;
+		panelChamps.add(getTextCouleur());
+		
+		gbc.gridy = 3;
+		gbc.gridx = 0;
+		Box boxEspece = Box.createHorizontalBox();
+		boxEspece.add(getLabelEspece());
+		boxEspece.add(getEspeceCB());
+		panelChamps.add(boxEspece);
+		
+		gbc.gridx = 1;
+		Box boxRace = Box.createHorizontalBox();
+		boxRace.add(getLabelRace());
+		boxRace.add(getRaceCB());
+		panelChamps.add(boxRace);
+		
+		gbc.gridy = 4;
+		gbc.gridx = 0;
+		panelChamps.add(getLabelTatouage());
+		
+		gbc.gridx = 1;
+		panelChamps.add(getTextTatouage());
+		
+		getContentPane().add(panelChamps);
+		
+		getContentPane().add(getPanelButtons());
 	}
 
 
@@ -231,6 +299,11 @@ public class EcranAnimaux extends JFrame {
 			panelButtons.add(getBtnAnnuler());
 		}
 		return panelButtons;
+	}
+	
+	private void afficherAnimal(Animal animal)
+	{
+		
 	}
 
 }
