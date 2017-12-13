@@ -176,10 +176,20 @@ public class AgendaManager {
 
 	public boolean checkDispo(Rdv rdv) throws BLLException {
 		try {
+			
+			calendar.setTime(rdv.getDateRdv());
+			int annee = calendar.get(Calendar.YEAR);
+			int mois = calendar.get(Calendar.MONTH);
+			int jour = calendar.get(Calendar.DAY_OF_MONTH);
+			int heures = calendar.get(Calendar.HOUR);
+			int minutes = calendar.get(Calendar.MINUTE);
+			
 			List<Rdv> agenda = agendaDAO.selectAll();
 
 			for (Rdv rdv2 : agenda) {
-				if (rdv.getDateRdv() == rdv2.getDateRdv() && rdv.getCodeVeterinaire() == rdv2.getCodeVeterinaire()) {
+				calendar.setTime(rdv2.getDateRdv());
+				if (calendar.get(Calendar.YEAR) == annee && calendar.get(Calendar.MONTH) == mois && calendar.get(Calendar.DAY_OF_MONTH) == jour
+						&& calendar.get(Calendar.HOUR) == heures && calendar.get(Calendar.MINUTE) == minutes) {
 					return false;
 				}
 			}

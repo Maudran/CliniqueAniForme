@@ -11,7 +11,7 @@ import fr.eni.aniforme.bo.Rdv;
 
 public interface DAO<T> {
 
-	public void insert(T data) throws DALException;
+	public int insert(T data) throws DALException;
 
 	public void update(T data) throws DALException;
 
@@ -44,5 +44,7 @@ public interface DAO<T> {
 	List<Animal> selectByClient(Client client) throws DALException;
 
 	Personnel connexionPersonnel(String nom, String motPasse) throws DALException;
+
+	Client selectClientWithAnimals(int id) throws DALException;
 
 }

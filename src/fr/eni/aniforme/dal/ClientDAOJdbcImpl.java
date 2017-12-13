@@ -20,7 +20,7 @@ public class ClientDAOJdbcImpl implements DAO<Client> {
 	Connection connection = null;
 
 	@Override
-	public void insert(Client client) throws DALException {
+	public int insert(Client client) throws DALException {
 		openConnection();
 
 		String sql = "INSERT INTO [Clients]([NomClient],[PrenomClient],[Adresse1],[Adresse2],[CodePostal],[Ville], "
@@ -34,6 +34,7 @@ public class ClientDAOJdbcImpl implements DAO<Client> {
 			ResultSet rs = statement.getGeneratedKeys();
 			if (rs.next()) {
 				client.setCodeClient(rs.getInt(1));
+				return rs.getInt(1);
 			}
 		} catch (SQLException e) {
 			throw new DALException("Erreur à l'insertion d'un client : " + client, e);
@@ -45,6 +46,7 @@ public class ClientDAOJdbcImpl implements DAO<Client> {
 				throw new DALException("Erreur à l'insertion d'un client : " + client, e);
 			}
 		}
+		return 0;
 
 	}
 
@@ -296,6 +298,30 @@ public class ClientDAOJdbcImpl implements DAO<Client> {
 			throw new DALException("Erreur à la récupération de tous les clients et leurs animaux", e);
 		}
 		return clients;
+	}
+
+	@Override
+	public Client selectClientWithAnimals(int id) throws DALException {
+		openConnection();
+
+		String sql = "SELECT * FROM Clients c INNER JOIN Animaux a ON c.codeClient = a.codeClient WHERE c.codeclient = ?";
+		Client client;
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, id);
+			ResultSet rs = statement.executeQuery();
+
+			client = getClientFromResultset(rs);
+			while (rs.next()) {
+				client.addAnimal(AnimalDAOJdbcImpl.getAnimalFromResultset(rs));
+			}
+			
+		} catch (SQLException e) {
+			throw new DALException("Erreur à la récupération d'un client et ses animaux", e);
+		}
+		return client;
+
 	}
 
 	@Override

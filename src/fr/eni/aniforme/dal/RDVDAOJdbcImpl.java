@@ -22,7 +22,7 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 	Connection connection = null;
 
 	@Override
-	public void insert(Rdv rdv) throws DALException {
+	public int insert(Rdv rdv) throws DALException {
 		openConnection();
 
 		String sql = "INSERT INTO [Agendas]([CodeVeto],[DateRdv],[CodeAnimal]) VALUES(?,?,?)";
@@ -31,7 +31,7 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 		try {
 			statement = connection.prepareStatement(sql);
 			fillStatementFromRdv(statement, rdv);
-			statement.executeUpdate();
+			return statement.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new DALException("Erreur à l'insertion d'un rdv : " + rdv, e);
@@ -288,6 +288,12 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 
 	@Override
 	public Personnel connexionPersonnel(String nom, String motPasse) throws DALException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Client selectClientWithAnimals(int id) throws DALException {
 		// TODO Auto-generated method stub
 		return null;
 	}

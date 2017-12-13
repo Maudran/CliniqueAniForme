@@ -30,11 +30,12 @@ import fr.eni.aniforme.bo.Client;
 import fr.eni.aniforme.bo.Personnel;
 import fr.eni.aniforme.bo.Rdv;
 import fr.eni.aniforme.bo.RdvAffichage;
+import fr.eni.aniforme.ihm.EcranAnimaux.AnimalListener;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
-public class PanelPriseRDV extends JPanel {
+public class PanelPriseRDV extends JPanel implements ClientListener, AnimalListener {
 	private JLabel lblClient, lblAnimal, lblVeterinaire, lblDate, lblHeure;
 	private JButton btnSupprimer, btnValider, btnAjouterClient, btnAjouterAnimal;
 	private JComboBox<String> cboVeterinaire, cboHeure, cboMinute;
@@ -299,14 +300,14 @@ public class PanelPriseRDV extends JPanel {
 
 	public EcranAjoutClient getEcranAjoutClient() {
 		if (ecranAjoutClient == null) {
-			ecranAjoutClient = new EcranAjoutClient();
+			ecranAjoutClient = new EcranAjoutClient(this);
 		}
 		return ecranAjoutClient;
 	}
 
 	public EcranAnimaux getEcranAnimaux() {
 		if (ecranAnimaux == null) {
-			ecranAnimaux = new EcranAnimaux((Client) getCboClient().getSelectedItem(),
+			ecranAnimaux = new EcranAnimaux(this,(Client) getCboClient().getSelectedItem(),
 					(Animal) getCboAnimal().getSelectedItem());
 		}
 		return ecranAnimaux;
@@ -448,5 +449,16 @@ public class PanelPriseRDV extends JPanel {
 		}
 
 		return rdv;
+	}
+
+	@Override
+	public void afficherClient(Client client) {
+		getCboClient().setSelectedItem(client.getNom()+" "+client.getPrenom());	
+	}
+
+	@Override
+	public void afficherAnimal(Animal animal) {
+		getCboAnimal().setSelectedItem(animal.getNom());
+		
 	}
 }

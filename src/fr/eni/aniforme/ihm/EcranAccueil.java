@@ -43,7 +43,6 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 		setSize(800, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		setEnabled(false);
 		addWindowListener(new WindowListener() {
 
 			@Override
@@ -138,7 +137,11 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					System.out.println("Bye bye");
+					getContentPane().removeAll();
+					getContentPane().revalidate();
+					repaint();
+					DialogConnexion dialogConnexion = new DialogConnexion(EcranAccueil.this);
+					dialogConnexion.setVisible(true);
 
 				}
 			});
@@ -236,7 +239,7 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 
 	public PanelClients getPanelClients() {
 		if (panelClients == null) {
-			panelClients = new PanelClients();
+			panelClients = new PanelClients(this);
 			this.setTitle("Gestion des clients");
 		}
 		return panelClients;
@@ -265,19 +268,19 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 		}
 		return panelGestionPersonnel;
 	}
-	
+
 	private void openDialogConnexion() {
 		SwingUtilities.invokeLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				if(dialogConnexion == null) {
+				if (dialogConnexion == null) {
 					dialogConnexion = new DialogConnexion(EcranAccueil.this);
 					dialogConnexion.setVisible(true);
 				}
 			}
 		});
-		
+
 	}
 
 	@Override
@@ -287,29 +290,27 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 			Personnel employe = personnelManager.connexionEmploye(nom, motPasse);
 
 			if (employe != null && dialogConnexion != null) {
-				
-				dialogConnexion.dispose();
+
+				dialogConnexion.setVisible(false);
 				this.setEnabled(true);
-				
+
 				if (employe.getRole().equalsIgnoreCase("vet")) {
 					getContentPane().removeAll();
 					getContentPane().add(getPanelAgenda(employe.getNom()));
 					getContentPane().revalidate();
 					repaint();
-					
+
 					getMenuGestionPersonnel().setEnabled(false);
 					getMenuGestionRdv().setEnabled(false);
-				}
-				else if (employe.getRole().equalsIgnoreCase("sec")) {
+				} else if (employe.getRole().equalsIgnoreCase("sec")) {
 					getContentPane().removeAll();
 					getContentPane().add(getPanelPriseRDV());
 					getContentPane().revalidate();
 					repaint();
-					
+
 					getMenuGestionPersonnel().setEnabled(false);
-					
-				} else if (employe.getRole().equalsIgnoreCase("admin"))
-				{
+
+				} else if (employe.getRole().equalsIgnoreCase("adm")) {
 					getContentPane().removeAll();
 					getContentPane().add(getPanelGestionPersonnel());
 					getContentPane().revalidate();
@@ -319,6 +320,12 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 		} catch (BLLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void deconnexion() {
+		setEnabled(false);
+
 	}
 
 }

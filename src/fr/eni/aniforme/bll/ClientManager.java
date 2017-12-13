@@ -31,10 +31,10 @@ public class ClientManager {
 		}
 	}
 
-	public void insertClient(Client client) throws BLLException {
+	public int insertClient(Client client) throws BLLException {
 		try {
 			validerClient(client);
-			clientDAO.insert(client);
+			return clientDAO.insert(client);
 		} catch (DALException e) {
 			throw new BLLException("Erreur à l'ajout d'un client : " + client, e);
 		}
@@ -76,7 +76,7 @@ public class ClientManager {
 	public Client getClientWithAnimals(int id) throws BLLException
 	{
 		try {
-			return clientDAO.selectAllWithAnimals().get(id);
+			return clientDAO.selectClientWithAnimals(id);
 		} catch (DALException e) {
 			throw new BLLException("Erreur à la récupération d'un client et ses animaux : " + id, e);
 		}

@@ -21,9 +21,6 @@ public class TableAnimauxModel extends AbstractTableModel {
 	ClientManager clientManager = ClientManager.getInstance();
 	Calendar calendar = GregorianCalendar.getInstance();
 
-	public TableAnimauxModel() {
-		updateData();
-	}
 
 	@Override
 	public int getColumnCount() {
@@ -78,12 +75,21 @@ public class TableAnimauxModel extends AbstractTableModel {
 		try {
 
 			List<Client> clients = clientManager.getClients();
-			animaux = clientManager.getClientWithAnimals(clients.get(0).getCodeClient()).getAnimaux();
-			fireTableDataChanged();
+			if (clientManager.getClientWithAnimals(clients.get(0).getCodeClient()).getAnimaux() != null) {
+				animaux = clientManager.getClientWithAnimals(clients.get(0).getCodeClient()).getAnimaux();
+				fireTableDataChanged();
+			}
+			
 		} catch (BLLException e) {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void clearData()
+	{
+		animaux = null;
+		fireTableDataChanged();
 	}
 
 	public void updateClient(Client client) {

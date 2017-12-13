@@ -23,6 +23,15 @@ public class AnimalManager {
 		}
 		return instance;
 	}
+	
+	public Animal getAnimalById(int id) throws BLLException 
+	{
+		try {
+			return animalDAO.selectById(id);
+		} catch (DALException e) {
+			throw new BLLException("Erreur à la récupération d'un animal par id : " + id, e);
+		}
+	}
 
 	public List<Animal> getAnimaux() throws BLLException {
 		try {
@@ -41,7 +50,7 @@ public class AnimalManager {
 		}
 	}
 
-	public void insertAnimal(Animal animal) throws BLLException {
+	public int insertAnimal(Animal animal) throws BLLException {
 		try {
 			validerAnimal(animal);
 			if (animal.getSexe().equalsIgnoreCase("Femelle")) {
@@ -51,7 +60,7 @@ public class AnimalManager {
 			} else {
 				animal.setSexe("H");
 			}
-			animalDAO.insert(animal);
+			return animalDAO.insert(animal);
 		} catch (DALException e) {
 			throw new BLLException("Erreur à l'ajout d'un animal : " + animal, e);
 		}

@@ -19,6 +19,7 @@ public class TableRechercheModel extends AbstractTableModel {
 
 		try {
 			clients = clientManager.getListByNom(saisie);
+			fireTableDataChanged();
 		} catch (BLLException e) {
 			e.printStackTrace();
 		}

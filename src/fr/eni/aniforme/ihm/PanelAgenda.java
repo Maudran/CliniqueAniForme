@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
+import fr.eni.aniforme.bll.AnimalManager;
 import fr.eni.aniforme.bll.BLLException;
 import fr.eni.aniforme.bll.PersonnelManager;
 import fr.eni.aniforme.bo.Personnel;
@@ -41,11 +42,32 @@ public class PanelAgenda extends JPanel {
 	private JPanel panelDossierMedical;
 	private EcranDossierMedical ecranDossierMedical;
 
+	AnimalManager animalManager = AnimalManager.getInstance();
+
 	public PanelAgenda(String nomVeto) {
 
 		setLayout(new BorderLayout());
 
-		add(getPanelVeterinaireDate(nomVeto), BorderLayout.NORTH);
+		add(getPanelVeterinaireDate(), BorderLayout.NORTH);
+
+		getCboVeterinaire().setSelectedItem(nomVeto);
+		getCboVeterinaire().addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getModel().updateVeterinaire((String) getCboVeterinaire().getSelectedItem(),
+						(Date) getDpCalendar().getModel().getValue());
+			}
+		});
+
+		getDpCalendar().addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getModel().updateVeterinaire((String) getCboVeterinaire().getSelectedItem(),
+						(Date) getDpCalendar().getModel().getValue());
+			}
+		});
 
 		add(getAgendaScrollPane(), BorderLayout.CENTER);
 
@@ -80,8 +102,7 @@ public class PanelAgenda extends JPanel {
 
 						@Override
 						public void run() {
-						//	EcranDossierMedical edm = new EcranDossierMedical((Animal)getTableau().getSelectedRow());
-						//	edm.setVisible(true);
+							getEcranDossierMedical().setVisible(true);
 						}
 					});
 				}
@@ -90,7 +111,7 @@ public class PanelAgenda extends JPanel {
 		return btnDossierMedical;
 	}
 
-	public JComboBox getCboVeterinaire(String nomVeto) {
+	public JComboBox<String> getCboVeterinaire() {
 		List<String> veterinaires = new ArrayList<String>();
 		List<Personnel> personnels;
 
@@ -107,7 +128,6 @@ public class PanelAgenda extends JPanel {
 			}
 			String[] veterinairesArray = veterinaires.toArray(new String[0]);
 			cboVeterinaire = new JComboBox<String>(veterinairesArray);
-			cboVeterinaire.setSelectedItem(nomVeto);
 		}
 		return cboVeterinaire;
 	}
@@ -156,11 +176,11 @@ public class PanelAgenda extends JPanel {
 		return dpCalendar;
 	}
 
-	public JPanel getPanelVeterinaireDate(String nomVeto) {
+	public JPanel getPanelVeterinaireDate() {
 		if (panelVeterinaireDate == null) {
 			panelVeterinaireDate = new JPanel();
 			panelVeterinaireDate.add(getLblVeterinaire());
-			panelVeterinaireDate.add(getCboVeterinaire(nomVeto));
+			panelVeterinaireDate.add(getCboVeterinaire());
 			panelVeterinaireDate.add(getLblDate());
 			panelVeterinaireDate.add(getDpCalendar());
 
@@ -175,6 +195,18 @@ public class PanelAgenda extends JPanel {
 			panelDossierMedical.add(getBtnDossierMedical());
 		}
 		return panelDossierMedical;
+	}
+
+	public EcranDossierMedical getEcranDossierMedical() {
+		if (ecranDossierMedical == null) {
+			try {
+				ecranDossierMedical = new EcranDossierMedical(animalManager
+						.getAnimalById(getModel().getValueAt(getTableau().getSelectedRow()).getCodeAnimal()));
+			} catch (BLLException e) {
+				e.printStackTrace();
+			}
+		}
+		return ecranDossierMedical;
 	}
 
 }

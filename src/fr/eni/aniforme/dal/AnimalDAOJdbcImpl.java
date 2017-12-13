@@ -19,7 +19,7 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 	Connection connection = null;
 
 	@Override
-	public void insert(Animal animal) throws DALException {
+	public int insert(Animal animal) throws DALException {
 
 		openConnection();
 
@@ -33,6 +33,7 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 			ResultSet rs = statement.getGeneratedKeys();
 			if (rs.next()) {
 				animal.setCodeAnimal(rs.getInt(1));
+				return rs.getInt(1);
 			}
 		} catch (SQLException e) {
 			throw new DALException("Erreur à l'insertion d'un animal : " + animal, e);
@@ -44,6 +45,7 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 				throw new DALException("Erreur à l'insertion d'un animal : " + animal, e);
 			}
 		}
+		return 0;
 	}
 
 	@Override
@@ -306,6 +308,12 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 
 	@Override
 	public Personnel connexionPersonnel(String nom, String motPasse) throws DALException {
+		return null;
+	}
+
+	@Override
+	public Client selectClientWithAnimals(int id) throws DALException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

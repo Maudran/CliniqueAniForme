@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import fr.eni.aniforme.bo.Animal;
+import fr.eni.aniforme.bo.Personnel;
 
 public class TestBLL {
 
@@ -19,6 +20,14 @@ public class TestBLL {
 		Animal animal = new Animal();
 
 		try {
+			
+			Personnel admin = new Personnel();
+			
+			admin.setMotPasse("x");
+			admin.setNom("admin");
+			admin.setRole("adm");
+			
+			personnelManager.insertPersonnel(admin);
 
 			// animal.setNom("Fluffy");
 			// animal.setSexe("Mâle");

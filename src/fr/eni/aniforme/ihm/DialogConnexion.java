@@ -15,11 +15,12 @@ public class DialogConnexion extends JDialog {
 	private JTextField textNom;
 	private JPasswordField textMotPasse;
 	private JLabel labelNom, labelMotPasse;
-	private JButton btnValider;
+	private JButton btnValider, btnQuitter;
 	
 	public interface ConnexionListener 
 	{
 		void checkConnexion(String nom, String motPasse);
+		void deconnexion();
 	}
 	
 	private ConnexionListener listener;
@@ -27,6 +28,7 @@ public class DialogConnexion extends JDialog {
 	public DialogConnexion(ConnexionListener listener) {
 		
 		this.listener = listener;
+		listener.deconnexion();
 		
 		setTitle("Connexion");
 		setBounds(100, 100, 289, 184);
@@ -42,6 +44,7 @@ public class DialogConnexion extends JDialog {
 		getContentPane().add(getTextMotPasse());
 		
 		getContentPane().add(getBtnValider());
+		getContentPane().add(getBtnQuitter());
 	}
 
 	public JTextField getTextNom() {
@@ -81,14 +84,31 @@ public class DialogConnexion extends JDialog {
 	public JButton getBtnValider() {
 		if (btnValider == null) {
 			btnValider = new JButton("Valider");
-			btnValider.setBounds(153, 111, 89, 23);
+			btnValider.setBounds(20, 111, 89, 23);
 			btnValider.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					listener.checkConnexion(getTextNom().getText(), getTextMotPasse().getPassword().toString());
+					String password = new String(getTextMotPasse().getPassword());
+					
+					listener.checkConnexion(getTextNom().getText(), password);
 				}
 			});
 		}
 		return btnValider;
+	}
+
+	public JButton getBtnQuitter() {
+		if (btnQuitter == null) {
+			btnQuitter = new JButton("Quitter");
+			btnQuitter.setBounds(153, 111, 89, 23);
+			btnQuitter.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					System.exit(0);
+				}
+			});
+		}
+		return btnQuitter;
 	}
 
 

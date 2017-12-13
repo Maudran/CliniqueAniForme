@@ -20,7 +20,7 @@ public class PersonnelDAOJdbcImpl implements DAO<Personnel> {
 	Connection connection = null;
 
 	@Override
-	public void insert(Personnel personnel) throws DALException {
+	public int insert(Personnel personnel) throws DALException {
 
 		openConnection();
 
@@ -34,6 +34,7 @@ public class PersonnelDAOJdbcImpl implements DAO<Personnel> {
 			ResultSet rs = statement.getGeneratedKeys();
 			if (rs.next()) {
 				personnel.setCodePers(rs.getInt(1));
+				return rs.getInt(1);
 			}
 		} catch (SQLException e) {
 			throw new DALException("Erreur à l'insertion d'un personnel : " + personnel, e);
@@ -45,6 +46,7 @@ public class PersonnelDAOJdbcImpl implements DAO<Personnel> {
 				throw new DALException("Erreur à l'insertion d'un personnel : " + personnel, e);
 			}
 		}
+		return 0;
 
 	}
 
@@ -290,6 +292,12 @@ public class PersonnelDAOJdbcImpl implements DAO<Personnel> {
 
 	@Override
 	public List<Animal> selectByClient(Client client) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Client selectClientWithAnimals(int id) throws DALException {
 		// TODO Auto-generated method stub
 		return null;
 	}
