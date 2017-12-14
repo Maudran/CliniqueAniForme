@@ -1,17 +1,15 @@
 package fr.eni.aniforme.ihm;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -91,20 +89,23 @@ public class PanelAgenda extends JPanel {
 
 	public JButton getBtnDossierMedical() {
 		if (btnDossierMedical == null) {
-			System.out.println("Bouton");
-			btnDossierMedical = new JButton("Dossier Médical");
+			btnDossierMedical = new JButton(new ImageIcon("ic_folder_open_black_24dp_2x.png"));
+			btnDossierMedical.setContentAreaFilled(false);
+			btnDossierMedical.setToolTipText("Dossier médical");
 			btnDossierMedical.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
+					if (getTableau().getSelectedRow() != -1) {
+						SwingUtilities.invokeLater(new Runnable() {
 
-					SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								getEcranDossierMedical().setVisible(true);
+							}
+						});
+					}
 
-						@Override
-						public void run() {
-							getEcranDossierMedical().setVisible(true);
-						}
-					});
 				}
 			});
 		}

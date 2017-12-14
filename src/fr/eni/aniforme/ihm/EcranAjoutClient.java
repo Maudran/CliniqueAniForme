@@ -7,9 +7,11 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -33,9 +35,10 @@ public class EcranAjoutClient extends JFrame {
 		this.listener = listener;
 		
 		setTitle("Ajout client");
-		setSize(800, 500);
+		setSize(450, 300);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
+		
 
 		add(getPanelChamps(), BorderLayout.CENTER);
 		add(getPanelBtns(), BorderLayout.SOUTH);
@@ -102,17 +105,28 @@ public class EcranAjoutClient extends JFrame {
 
 	public JButton getBtnValider() {
 		if (btnValider == null) {
-			btnValider = new JButton("Valider");
+			btnValider = new JButton(new ImageIcon("ic_done_black_24dp/web/ic_done_black_24dp_1x.png"));
+			btnValider.setContentAreaFilled(false);
+			btnValider.setToolTipText("Valider");
 			btnValider.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					try {
-						int code = clientManager.insertClient(getClientFromChamps());
-						listener.afficherClient(clientManager.getClientById(code));
-					} catch (BLLException e1) {
-						e1.printStackTrace();
+					
+					if (checkClient(getClientFromChamps())) {
+						try {
+							int code = clientManager.insertClient(getClientFromChamps());
+							listener.afficherClient(clientManager.getClientById(code));
+							setVisible(false);
+						} catch (BLLException e1) {
+							e1.printStackTrace();
+						}
 					}
+					else
+					{
+						JOptionPane.showMessageDialog(EcranAjoutClient.this, "Les champs nom et prénom sont obligatoires");
+					}
+					
 
 				}
 			});
@@ -122,7 +136,9 @@ public class EcranAjoutClient extends JFrame {
 
 	public JButton getBtnAnnuler() {
 		if (btnAnnuler == null) {
-			btnAnnuler = new JButton("Annuler");
+			btnAnnuler = new JButton(new ImageIcon("web/ic_undo_black_24dp_1x.png"));
+			btnAnnuler.setContentAreaFilled(false);
+			btnAnnuler.setToolTipText("Annuler");
 			btnAnnuler.addActionListener(new ActionListener() {
 
 				@Override
@@ -247,5 +263,16 @@ public class EcranAjoutClient extends JFrame {
 		getTxtCodePostal().setText(null);
 		getTxtVille().setText(null);
 
+	}
+	
+	private boolean checkClient(Client client) {
+		if (isNullOrEmpty(client.getNom()) || isNullOrEmpty(client.getPrenom())) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean isNullOrEmpty(String string) {
+		return string == null || string.trim().isEmpty();
 	}
 }

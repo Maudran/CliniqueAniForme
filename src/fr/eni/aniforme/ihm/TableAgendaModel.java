@@ -1,20 +1,15 @@
 package fr.eni.aniforme.ihm;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
-
 import javax.swing.table.AbstractTableModel;
 
 import fr.eni.aniforme.bll.AgendaManager;
 import fr.eni.aniforme.bll.BLLException;
 import fr.eni.aniforme.bo.Rdv;
-import fr.eni.aniforme.bo.RdvAffichage;
 
 public class TableAgendaModel extends AbstractTableModel {
 

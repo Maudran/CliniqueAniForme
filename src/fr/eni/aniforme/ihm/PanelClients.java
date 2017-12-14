@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -64,7 +65,9 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 
 	public JButton getBtnRechercherClient() {
 		if (btnRechercherClient == null) {
-			btnRechercherClient = new JButton("Recherche");
+			btnRechercherClient = new JButton(new ImageIcon("ic_search_black_24dp/web/ic_search_black_24dp_1x.png"));
+			btnRechercherClient.setContentAreaFilled(false);
+			btnRechercherClient.setToolTipText("Rechercher client");
 			btnRechercherClient.addActionListener(new ActionListener() {
 
 				@Override
@@ -85,7 +88,9 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 
 	public JButton getBtnAjouterClient() {
 		if (btnAjouterClient == null) {
-			btnAjouterClient = new JButton("Ajouter");
+			btnAjouterClient = new JButton(new ImageIcon("web/ic_add_black_24dp_1x.png"));
+			btnAjouterClient.setContentAreaFilled(false);
+			btnAjouterClient.setToolTipText("Ajouter client");
 			btnAjouterClient.addActionListener(new ActionListener() {
 
 				@Override
@@ -107,7 +112,9 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 
 	public JButton getBtnSupprimerClient(JFrame frame) {
 		if (btnSupprimerClient == null) {
-			btnSupprimerClient = new JButton("Supprimer");
+			btnSupprimerClient = new JButton(new ImageIcon("ic_delete_black_24dp/web/ic_delete_black_24dp_1x.png"));
+			btnSupprimerClient.setContentAreaFilled(false);
+			btnSupprimerClient.setToolTipText("Supprimer client");
 			btnSupprimerClient.addActionListener(new ActionListener() {
 
 				@Override
@@ -136,7 +143,9 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 
 	public JButton getBtnValider(JFrame frame) {
 		if (btnValider == null) {
-			btnValider = new JButton("Valider");
+			btnValider = new JButton(new ImageIcon("ic_done_black_24dp/web/ic_done_black_24dp_1x.png"));
+			btnValider.setContentAreaFilled(false);
+			btnValider.setToolTipText("Valider modifications client");
 			btnValider.addActionListener(new ActionListener() {
 
 				@Override
@@ -163,7 +172,9 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 
 	public JButton getBtnAnnuler() {
 		if (btnAnnuler == null) {
-			btnAnnuler = new JButton("Annuler");
+			btnAnnuler = new JButton(new ImageIcon("web/ic_undo_black_24dp_1x.png"));
+			btnAnnuler.setContentAreaFilled(false);
+			btnAnnuler.setToolTipText("Annuler modifications client");
 			btnAnnuler.addActionListener(new ActionListener() {
 
 				@Override
@@ -178,7 +189,9 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 
 	public JButton getBtnAjouterAnimal() {
 		if (btnAjouterAnimal == null) {
-			btnAjouterAnimal = new JButton("Ajouter");
+			btnAjouterAnimal = new JButton(new ImageIcon("web/ic_add_black_24dp_1x.png"));
+			btnAjouterAnimal.setContentAreaFilled(false);
+			btnAjouterAnimal.setToolTipText("Ajouter animal");
 			btnAjouterAnimal.addActionListener(new ActionListener() {
 
 				@Override
@@ -199,13 +212,15 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 
 	public JButton getBtnSupprimerAnimal(JFrame frame) {
 		if (btnSupprimerAnimal == null) {
-			btnSupprimerAnimal = new JButton("Supprimer");
+			btnSupprimerAnimal = new JButton(new ImageIcon("ic_delete_black_24dp/web/ic_delete_black_24dp_1x.png"));
+			btnSupprimerAnimal.setContentAreaFilled(false);
+			btnSupprimerAnimal.setToolTipText("Supprimer animal");
 			btnSupprimerAnimal.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (getTableauAnimaux().getSelectedRow() != -1) {
-						if (JOptionPane.showConfirmDialog(frame, "Voulez-vous arvhiver cet animal?",
+						if (JOptionPane.showConfirmDialog(frame, "Voulez-vous archiver cet animal?",
 								"Demande de confirmation", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 							try {
 								animalManager.archiverAnimal(
@@ -226,7 +241,9 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 
 	public JButton getBtnEditerAnimal() {
 		if (btnEditerAnimal == null) {
-			btnEditerAnimal = new JButton("Editer");
+			btnEditerAnimal = new JButton(new ImageIcon("ic_border_color_black_24dp/web/ic_border_color_black_24dp_1x.png"));
+			btnEditerAnimal.setContentAreaFilled(false);
+			btnEditerAnimal.setToolTipText("Modifier animal");
 			btnEditerAnimal.addActionListener(new ActionListener() {
 
 				@Override
@@ -388,6 +405,7 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 			gbc.insets = new Insets(8, 8, 8, 8);
 			gbc.gridx = 0;
 			gbc.gridy = 0;
+			gbc.anchor = GridBagConstraints.WEST;
 			panelCoordonneesClients.add(getLblCode(), gbc);
 			gbc.gridx = 1;
 			gbc.gridy = 0;
@@ -413,7 +431,7 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 			gbc.gridy = 3;
 
 			panelCoordonneesClients.add(getTxtAdresse1(), gbc);
-			
+
 			gbc.gridy = 4;
 			panelCoordonneesClients.add(getTxtAdresse2(), gbc);
 			gbc.gridx = 0;
@@ -461,7 +479,7 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 
 	public EcranAnimaux getAjoutAnimal() {
 		if (ajoutAnimal == null) {
-			ajoutAnimal = new EcranAnimaux(getClientFromCode(getCode().getText()));
+			ajoutAnimal = new EcranAnimaux(this, getClientFromCode(getCode().getText()));
 		}
 		return ajoutAnimal;
 	}
@@ -507,11 +525,8 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 		getTxtAdresse2().setText(null);
 		getTxtCodePostal().setText(null);
 		getTxtVille().setText(null);
+		getModel().clearData();
 
-		if (getModel().getRowCount() > 0) {
-			getModel().clearData();
-		}
-		
 	}
 
 	@Override
@@ -527,14 +542,13 @@ public class PanelClients extends JPanel implements ClientListener, AnimalListen
 		if (client.getAnimaux() != null) {
 			getModel().updateClient(client);
 		}
-		
 
 	}
 
 	@Override
 	public void afficherAnimal(Animal animal) {
-		// TODO Auto-generated method stub
-		
+		getModel().updateClient(animal.getClient());
+
 	}
 
 }

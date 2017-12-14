@@ -140,25 +140,4 @@ public class Client {
 		return nom + " " + prenom;
 	}
 
-//	@Override
-//	public String toString() {
-//		StringBuilder builder = new StringBuilder();
-//		builder.append("Client [CodeClient=");
-//		builder.append(codeClient);
-//		builder.append(", nom=");
-//		builder.append(nom);
-//		builder.append(", prenom=");
-//		builder.append(prenom);
-//		
-//		if(animaux.size() > 0) {
-//			builder.append(", animaux=[");
-//			for(Animal a : animaux) {
-//				builder.append("\n\t\t").append(a);
-//			}
-//		}
-//		
-//		builder.append("\n]");
-//		return builder.toString();
-//	}
-
 }

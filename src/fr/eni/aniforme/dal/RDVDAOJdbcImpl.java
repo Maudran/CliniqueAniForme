@@ -15,7 +15,6 @@ import fr.eni.aniforme.bo.Animal;
 import fr.eni.aniforme.bo.Client;
 import fr.eni.aniforme.bo.Personnel;
 import fr.eni.aniforme.bo.Rdv;
-import fr.eni.aniforme.bo.RdvAffichage;
 
 public class RDVDAOJdbcImpl implements DAO<Rdv> {
 
@@ -47,16 +46,6 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 	}
 
 	@Override
-	public void update(Rdv rdv) throws DALException {
-
-	}
-
-	@Override
-	public void delete(int id) throws DALException {
-
-	}
-
-	@Override
 	public void delete(Rdv rdv) throws DALException {
 		openConnection();
 
@@ -70,17 +59,6 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 			throw new DALException("Erreur lors de la suppression d'un rdv", e);
 		}
 
-	}
-
-	@Override
-	public Rdv selectById(int id) throws DALException {
-		return null;
-	}
-
-	@Override
-	public List<Rdv> selectByRole(String role) throws DALException {
-
-		return null;
 	}
 
 	@Override
@@ -112,10 +90,9 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 			throw new DALException("Erreur à la récupération des rdv par nom", e);
 		}
 	}
-	
+
 	@Override
-	public List<Rdv> selectAgendaVet(String nom, Date date) throws DALException
-	{
+	public List<Rdv> selectAgendaVet(String nom, Date date) throws DALException {
 		openConnection();
 
 		String sql = "SELECT codeveto,daterdv,ag.codeanimal,codepers,nom,motpasse,role,p.archive,"
@@ -143,13 +120,9 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 		} catch (SQLException e) {
 			throw new DALException("Erreur à la récupération des rdv par veterinaire et par date", e);
 		}
-		
+
 	}
 
-	@Override
-	public Rdv selectByNom(String nom) throws DALException {
-		return null;
-	}
 
 	@Override
 	public List<Rdv> selectAll() throws DALException {
@@ -211,18 +184,6 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 		}
 	}
 
-	@Override
-	public List<String> selectRaces() throws DALException {
-
-		return null;
-	}
-
-	@Override
-	public List<String> selectEspeces() throws DALException {
-
-		return null;
-	}
-
 	private void openConnection() throws DALException {
 		try {
 			if (connection == null)
@@ -269,32 +230,62 @@ public class RDVDAOJdbcImpl implements DAO<Rdv> {
 	}
 
 	@Override
+	public void update(Rdv rdv) throws DALException {
+	}
+
+	@Override
+	public void delete(int id) throws DALException {
+	}
+
+	@Override
+	public Rdv selectById(int id) throws DALException {
+		return null;
+	}
+	
+	@Override
+	public Rdv selectByNom(String nom) throws DALException {
+		return null;
+	}
+
+	@Override
+	public List<Rdv> selectByRole(String role) throws DALException {
+		return null;
+	}
+
+	@Override
 	public List<Animal> selectAnimaux(Client client) throws DALException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public ArrayList<Client> selectAllWithAnimals() throws DALException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Animal> selectByClient(Client client) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Personnel connexionPersonnel(String nom, String motPasse) throws DALException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Client selectClientWithAnimals(int id) throws DALException {
-		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> selectRaces() throws DALException {
+
+		return null;
+	}
+
+	@Override
+	public List<String> selectEspeces() throws DALException {
+
 		return null;
 	}
 

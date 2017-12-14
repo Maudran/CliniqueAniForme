@@ -57,10 +57,10 @@ public class PersonnelManager {
 		}
 	}
 
-	public void insertPersonnel(Personnel personnel) throws BLLException {
+	public int insertPersonnel(Personnel personnel) throws BLLException {
 		try {
 			validerEmploye(personnel);
-			personnelDAO.insert(personnel);
+			return personnelDAO.insert(personnel);
 		} catch (DALException e) {
 			throw new BLLException("Erreur à l'ajout d'un employé : " + personnel, e);
 		}

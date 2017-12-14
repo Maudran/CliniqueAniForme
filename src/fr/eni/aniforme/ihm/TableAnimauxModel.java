@@ -88,7 +88,7 @@ public class TableAnimauxModel extends AbstractTableModel {
 	
 	public void clearData()
 	{
-		animaux = null;
+		animaux = new ArrayList<>();
 		fireTableDataChanged();
 	}
 

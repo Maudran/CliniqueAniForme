@@ -58,7 +58,6 @@ public class TestBLL {
 			System.out.println(dateDuJour);
 
 			System.out.println(agenda.getAgendaByDate(dateDuJour));
-			System.out.println(agenda.getRdvAffichageDate(new Date()));
 
 		} catch (BLLException e) {
 

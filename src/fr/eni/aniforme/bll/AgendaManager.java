@@ -7,10 +7,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import fr.eni.aniforme.bo.Animal;
-import fr.eni.aniforme.bo.Client;
 import fr.eni.aniforme.bo.Personnel;
 import fr.eni.aniforme.bo.Rdv;
-import fr.eni.aniforme.bo.RdvAffichage;
 import fr.eni.aniforme.dal.DALException;
 import fr.eni.aniforme.dal.DAO;
 import fr.eni.aniforme.dal.DAOFactory;
@@ -21,7 +19,6 @@ public class AgendaManager {
 	private DAO<Rdv> agendaDAO;
 	private DAO<Animal> animalDAO = DAOFactory.getAnimalDAO();
 	private DAO<Personnel> personnelDAO = DAOFactory.getPersonnelDAO();
-	private DAO<Client> clientDAO = DAOFactory.getClientDAO();
 	Calendar calendar = GregorianCalendar.getInstance();
 
 	private AgendaManager() {
@@ -97,57 +94,6 @@ public class AgendaManager {
 			}
 		} catch (DALException e) {
 			throw new BLLException("Erreur à la récupération de l'agenda par date : " + date, e);
-		}
-		return agendaAffichage;
-	}
-
-	public List<RdvAffichage> getRdvAffichageDate(Date date) throws BLLException {
-		List<Rdv> agenda;
-		List<RdvAffichage> agendaAffichage = new ArrayList<RdvAffichage>();
-		try {
-			agenda = agendaDAO.selectAll();
-			calendar.setTime(date);
-			int annee = calendar.get(Calendar.YEAR);
-			int mois = calendar.get(Calendar.MONTH);
-			int jour = calendar.get(Calendar.DAY_OF_MONTH);
-
-			for (Rdv rdv : agenda) {
-				calendar.setTime(rdv.getDateRdv());
-				if (calendar.get(Calendar.YEAR) == annee && calendar.get(Calendar.MONTH) == mois
-						&& calendar.get(Calendar.DAY_OF_MONTH) == jour) {
-
-					agendaAffichage
-							.add(new RdvAffichage(heureDate(rdv), nomDuClient(rdv), nomAnimal(rdv), raceAnimal(rdv)));
-				}
-			}
-
-		} catch (DALException e) {
-			throw new BLLException("Erreur à la récupération des rdv à afficher", e);
-		}
-		return agendaAffichage;
-	}
-
-	public List<RdvAffichage> getRdvAffichageVet(String nom, Date date) throws BLLException {
-		List<Rdv> agenda;
-		List<RdvAffichage> agendaAffichage = new ArrayList<RdvAffichage>();
-		try {
-			agenda = agendaDAO.selectListByNom(nom);
-			calendar.setTime(date);
-			int annee = calendar.get(Calendar.YEAR);
-			int mois = calendar.get(Calendar.MONTH);
-			int jour = calendar.get(Calendar.DAY_OF_MONTH);
-
-			for (Rdv rdv : agenda) {
-				calendar.setTime(rdv.getDateRdv());
-				if (calendar.get(Calendar.YEAR) == annee && calendar.get(Calendar.MONTH) == mois
-						&& calendar.get(Calendar.DAY_OF_MONTH) == jour) {
-					agendaAffichage
-							.add(new RdvAffichage(heureDate(rdv), nomDuClient(rdv), nomAnimal(rdv), raceAnimal(rdv)));
-				}
-			}
-
-		} catch (DALException e) {
-			throw new BLLException("Erreur à la récupération des rdv à afficher", e);
 		}
 		return agendaAffichage;
 	}

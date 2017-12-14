@@ -1,7 +1,6 @@
 package fr.eni.aniforme.ihm;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JButton;

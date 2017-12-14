@@ -1,32 +1,28 @@
 package fr.eni.aniforme.ihm;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-
 import fr.eni.aniforme.bll.AnimalManager;
 import fr.eni.aniforme.bll.BLLException;
 import fr.eni.aniforme.bo.Animal;
 import fr.eni.aniforme.bo.Client;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -40,19 +36,17 @@ public class EcranAnimaux extends JFrame {
 	private JPanel panelButtons, panelClient, panelAnimal, panelEspeceRace, panelCenter;
 
 	private AnimalManager animalManager = AnimalManager.getInstance();
-	
-	public interface AnimalListener 
-	{
+
+	public interface AnimalListener {
 		void afficherAnimal(Animal animal);
 	}
-	
+
 	private AnimalListener listener;
-	
 
 	public EcranAnimaux(AnimalListener listener, Client client, Animal animal) {
-		
+
 		this.listener = listener;
-		
+
 		setLayout(new BorderLayout());
 
 		this.setTitle("Animaux");
@@ -65,14 +59,48 @@ public class EcranAnimaux extends JFrame {
 
 	}
 
-	public EcranAnimaux(Client client) {
+	public EcranAnimaux(AnimalListener listener, Client client) {
+
+		this.listener = listener;
 
 		setLayout(new BorderLayout());
 		this.setTitle("Animaux");
-		this.setSize(800, 500);
+		this.setSize(500, 500);
 
 		add(getPanelClient(), BorderLayout.NORTH);
 		add(getPanelCenter(), BorderLayout.CENTER);
+
+		getEspeceCB().addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				List<String> races = new ArrayList<>();
+
+				switch ((String) getEspeceCB().getSelectedItem()) {
+				case "Chien":
+					races.add("Batard");
+					races.add("Setter");
+					break;
+				case "Escargot":
+					races.add("Bourgogne");
+					break;
+				case "Oiseau":
+					races.add("Canari");
+					break;
+				case "Tortue":
+					races.add("Marine");
+					break;
+				case "Chat":
+					races.add("Siamois");
+					break;
+				}
+
+				String[] racesArray = races.toArray(new String[0]);
+				getRaceCB().setModel(new DefaultComboBoxModel<String>(racesArray));
+
+			}
+		});
 		add(getPanelButtons(client), BorderLayout.SOUTH);
 
 		afficherAnimal(client);
@@ -89,7 +117,7 @@ public class EcranAnimaux extends JFrame {
 			panelButtons.add(getBtnValider(client), gbc);
 			gbc.gridx = 6;
 			gbc.gridy = 0;
-			panelButtons.add(getBtnAnnuler(), gbc);
+			panelButtons.add(getBtnAnnuler(client), gbc);
 		}
 		return panelButtons;
 	}
@@ -152,11 +180,11 @@ public class EcranAnimaux extends JFrame {
 			panelEspeceRace.setAlignmentY(LEFT_ALIGNMENT);
 			GridBagConstraints gbc = new GridBagConstraints();
 			gbc.insets = new Insets(10, 10, 10, 10);
-			panelEspeceRace.add(getLabelEspece());
-			panelEspeceRace.add(getEspeceCB());
-			panelEspeceRace.add(getLabelRace());
-			panelEspeceRace.add(getRaceCB());
-			panelEspeceRace.add(getSexeCB());
+			panelEspeceRace.add(getLabelEspece(), gbc);
+			panelEspeceRace.add(getEspeceCB(), gbc);
+			panelEspeceRace.add(getLabelRace(), gbc);
+			panelEspeceRace.add(getRaceCB(), gbc);
+			panelEspeceRace.add(getSexeCB(), gbc);
 		}
 		return panelEspeceRace;
 	}
@@ -271,11 +299,28 @@ public class EcranAnimaux extends JFrame {
 	}
 
 	public JComboBox<String> getRaceCB() {
-		List<String> races = null;
+		List<String> races = new ArrayList<String>();
 		if (raceCB == null) {
 
 			try {
-				races = animalManager.getRaces();
+				switch (animalManager.getEspeces().get(0)) {
+				case "Chien":
+					races.add("Batard");
+					races.add("Setter");
+					break;
+				case "Escargot":
+					races.add("Bourgogne");
+					break;
+				case "Oiseau":
+					races.add("Canari");
+					break;
+				case "Tortue":
+					races.add("Marine");
+					break;
+				case "Chat":
+					races.add("Siamois");
+					break;
+				}
 
 			} catch (BLLException e) {
 				e.printStackTrace();
@@ -289,58 +334,87 @@ public class EcranAnimaux extends JFrame {
 
 	public JButton getBtnValider(Client client) {
 		if (btnValider == null) {
-			btnValider = new JButton("Valider");
+			btnValider = new JButton(new ImageIcon("ic_done_black_24dp/web/ic_done_black_24dp_1x.png"));
+			btnValider.setContentAreaFilled(false);
+			btnValider.setToolTipText("Valider");
 			btnValider.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					try {
-						int code = animalManager.insertAnimal(getAnimalFromChamps(client));
-						listener.afficherAnimal(animalManager.getAnimalById(code));
-					} catch (BLLException e1) {
-						e1.printStackTrace();
+
+					if (checkAnimal(getAnimalFromChamps(client))) {
+						try {
+							if (isNullOrEmpty(getCodeAnimal().getText())) {
+								int code = animalManager.insertAnimal(getAnimalFromChamps(client));
+								listener.afficherAnimal(animalManager.getAnimalById(code));
+								setVisible(false);
+							} else {
+								if (JOptionPane.showConfirmDialog(EcranAnimaux.this,
+										"Voulez-vous enregistrer les modifications?", "Demande de confrmation",
+										JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+									animalManager.updateAnimal(getAnimalFromChamps(client));
+									listener.afficherAnimal(
+											animalManager.getAnimalById(Integer.valueOf(getCodeAnimal().getText())));
+									setVisible(false);
+								}
+
+							}
+
+						} catch (BLLException e1) {
+							e1.printStackTrace();
+						}
+					} else {
+						JOptionPane.showMessageDialog(EcranAnimaux.this,
+								"Les champs nom, sexe, race et especes sont obligatoires");
 					}
-					
+
 				}
 			});
 		}
 		return btnValider;
 	}
 
-	public JButton getBtnAnnuler() {
+	public JButton getBtnAnnuler(Client client) {
 		if (btnAnnuler == null) {
-			btnAnnuler = new JButton("Annuler");
+			btnAnnuler = new JButton(new ImageIcon("web/ic_undo_black_24dp_1x.png"));
+			btnAnnuler.setContentAreaFilled(false);
+			btnAnnuler.setToolTipText("Annuler");
+			btnAnnuler.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (isNullOrEmpty(getCodeAnimal().getText())) {
+						effacerChamps();
+					} else {
+						afficherAnimal(client, getAnimalFromCode(getCodeAnimal().getText()));
+					}
+
+				}
+			});
 		}
 		return btnAnnuler;
 	}
-	
-	public Animal getAnimalFromChamps(Client client)
-	{
+
+	public Animal getAnimalFromChamps(Client client) {
 		Animal animal = new Animal();
+
+		if (!isNullOrEmpty(getCodeAnimal().getText())) {
+			animal.setCodeAnimal(Integer.valueOf(getCodeAnimal().getText()));
+		}
 
 		animal.setNom(getTextNomAnimal().getText());
 		animal.setClient(client);
 		animal.setCouleur(getTextCouleur().getText());
-		animal.setSexe((String) getSexeCB().getSelectedItem()); 
+		animal.setSexe((String) getSexeCB().getSelectedItem());
 		animal.setRace((String) getRaceCB().getSelectedItem());
 		animal.setEspece((String) getEspeceCB().getSelectedItem());
 		animal.setTatouage(getTextTatouage().getText());
 
 		return animal;
 	}
-	
-	private void effacerChamps(Client client, Animal animal)
-	{
-		getCodeAnimal().setText(Integer.toString(animal.getCodeAnimal()));
-		getNomClient().setText(client.getNom() + " " + client.getPrenom());
-		getTextNomAnimal().setText(null);
-		getTextCouleur().setText(null);
-		getTextTatouage().setText(null);
-	}
-	
-	private void effacerChamps(Client client)
-	{
-		getNomClient().setText(client.getNom() + " " + client.getPrenom());
+
+	private void effacerChamps() {
 		getTextNomAnimal().setText(null);
 		getTextCouleur().setText(null);
 		getTextTatouage().setText(null);
@@ -361,6 +435,29 @@ public class EcranAnimaux extends JFrame {
 
 	private void afficherAnimal(Client client) {
 		getNomClient().setText(client.getNom() + " " + client.getPrenom());
+	}
+
+	private boolean checkAnimal(Animal animal) {
+		if (isNullOrEmpty(animal.getNom()) || isNullOrEmpty(animal.getSexe()) || isNullOrEmpty(animal.getRace())
+				|| isNullOrEmpty(animal.getEspece()) || animal.getClient() == null) {
+			return false;
+		}
+		return true;
+	}
+
+	public Animal getAnimalFromCode(String code) {
+		try {
+			return animalManager.getAnimalById(Integer.valueOf(code));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (BLLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private boolean isNullOrEmpty(String string) {
+		return string == null || string.trim().isEmpty();
 	}
 
 }

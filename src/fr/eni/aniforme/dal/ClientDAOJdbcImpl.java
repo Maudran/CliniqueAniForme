@@ -107,9 +107,81 @@ public class ClientDAOJdbcImpl implements DAO<Client> {
 	}
 
 	@Override
-	public List<Client> selectByRole(String role) throws DALException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Client> selectAll() throws DALException {
+		openConnection();
+
+		String sql = "SELECT * FROM Clients WHERE archive = 0";
+		List<Client> clients = new LinkedList<>();
+
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sql);
+			while (resultSet.next()) {
+				clients.add(getClientFromResultset(resultSet));
+			}
+			return clients;
+		} catch (SQLException e) {
+			throw new DALException("Erreur à la récupération de tous les clients", e);
+		}
+	}
+
+	@Override
+	public ArrayList<Client> selectAllWithAnimals() throws DALException {
+		openConnection();
+
+		String sql = "SELECT * FROM Clients c INNER JOIN Animaux a ON c.codeClient = a.codeClient";
+		ArrayList<Client> clients = new ArrayList<>();
+
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(sql);
+
+			int codeClientPrecedent = -1;
+			Client newClient = null;
+			while (rs.next()) {
+
+				int code = rs.getInt("codeClient");
+
+				if (code != codeClientPrecedent) {
+
+					if (newClient != null) {
+						clients.add(newClient);
+					}
+					newClient = getClientFromResultset(rs);
+
+					codeClientPrecedent = code;
+				}
+				newClient.addAnimal(AnimalDAOJdbcImpl.getAnimalFromResultset(rs));
+			}
+			clients.add(newClient);
+		} catch (SQLException e) {
+			throw new DALException("Erreur à la récupération de tous les clients et leurs animaux", e);
+		}
+		return clients;
+	}
+
+	@Override
+	public Client selectClientWithAnimals(int id) throws DALException {
+		openConnection();
+
+		String sql = "SELECT * FROM Clients c INNER JOIN Animaux a ON c.codeClient = a.codeClient WHERE c.codeclient = ?";
+		Client client;
+
+		try {
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, id);
+			ResultSet rs = statement.executeQuery();
+
+			client = getClientFromResultset(rs);
+			while (rs.next()) {
+				client.addAnimal(AnimalDAOJdbcImpl.getAnimalFromResultset(rs));
+			}
+
+		} catch (SQLException e) {
+			throw new DALException("Erreur à la récupération d'un client et ses animaux", e);
+		}
+		return client;
+
 	}
 
 	@Override
@@ -172,29 +244,6 @@ public class ClientDAOJdbcImpl implements DAO<Client> {
 		}
 	}
 
-	@Override
-	public Client selectByNom(String nom) throws DALException {
-		return null;
-	}
-
-	@Override
-	public List<Client> selectByDate(Date date) throws DALException {
-
-		return null;
-	}
-
-	@Override
-	public List<String> selectRaces() throws DALException {
-
-		return null;
-	}
-
-	@Override
-	public List<String> selectEspeces() throws DALException {
-
-		return null;
-	}
-
 	private void openConnection() throws DALException {
 		try {
 			if (connection == null)
@@ -247,104 +296,50 @@ public class ClientDAOJdbcImpl implements DAO<Client> {
 	}
 
 	@Override
-	public List<Client> selectAll() throws DALException {
-		openConnection();
-
-		String sql = "SELECT * FROM Clients WHERE archive = 0";
-		List<Client> clients = new LinkedList<>();
-
-		try {
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sql);
-			while (resultSet.next()) {
-				clients.add(getClientFromResultset(resultSet));
-			}
-			return clients;
-		} catch (SQLException e) {
-			throw new DALException("Erreur à la récupération de tous les clients", e);
-		}
-	}
-
-	@Override
-	public ArrayList<Client> selectAllWithAnimals() throws DALException {
-		openConnection();
-
-		String sql = "SELECT * FROM Clients c INNER JOIN Animaux a ON c.codeClient = a.codeClient";
-		ArrayList<Client> clients = new ArrayList<>();
-
-		try {
-			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery(sql);
-
-			int codeClientPrecedent = -1;
-			Client newClient = null;
-			while (rs.next()) {
-
-				int code = rs.getInt("codeClient");
-
-				if (code != codeClientPrecedent) {
-
-					if (newClient != null) {
-						clients.add(newClient);
-					}
-					newClient = getClientFromResultset(rs);
-
-					codeClientPrecedent = code;
-				}
-				newClient.addAnimal(AnimalDAOJdbcImpl.getAnimalFromResultset(rs));
-			}
-			clients.add(newClient);
-		} catch (SQLException e) {
-			throw new DALException("Erreur à la récupération de tous les clients et leurs animaux", e);
-		}
-		return clients;
-	}
-
-	@Override
-	public Client selectClientWithAnimals(int id) throws DALException {
-		openConnection();
-
-		String sql = "SELECT * FROM Clients c INNER JOIN Animaux a ON c.codeClient = a.codeClient WHERE c.codeclient = ?";
-		Client client;
-		
-		try {
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, id);
-			ResultSet rs = statement.executeQuery();
-
-			client = getClientFromResultset(rs);
-			while (rs.next()) {
-				client.addAnimal(AnimalDAOJdbcImpl.getAnimalFromResultset(rs));
-			}
-			
-		} catch (SQLException e) {
-			throw new DALException("Erreur à la récupération d'un client et ses animaux", e);
-		}
-		return client;
-
-	}
-
-	@Override
 	public void delete(Rdv rdv) throws DALException {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public List<Rdv> selectAgendaVet(String nom, Date date) throws DALException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Animal> selectByClient(Client client) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Personnel connexionPersonnel(String nom, String motPasse) throws DALException {
-		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Client> selectByRole(String role) throws DALException {
+		return null;
+	}
+
+	@Override
+	public Client selectByNom(String nom) throws DALException {
+		return null;
+	}
+
+	@Override
+	public List<Client> selectByDate(Date date) throws DALException {
+
+		return null;
+	}
+
+	@Override
+	public List<String> selectRaces() throws DALException {
+
+		return null;
+	}
+
+	@Override
+	public List<String> selectEspeces() throws DALException {
+
 		return null;
 	}
 

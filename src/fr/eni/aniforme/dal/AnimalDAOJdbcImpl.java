@@ -105,10 +105,32 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 			throw new DALException("Erreur à la récupération d'un animal : " + id, e);
 		}
 	}
-	
+
 	@Override
-	public List<Animal> selectByClient(Client client) throws DALException
-	{
+	public List<Animal> selectAll() throws DALException {
+		openConnection();
+
+		String sql = "SELECT codeanimal,nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage, CAST(antecedents AS varchar(max)) as antecedents,a.archive,"
+				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email, CAST(remarque AS varchar(max)) as remarque,c.archive "
+				+ "FROM Animaux a INNER JOIN Clients c ON a.codeclient = c.codeclient where a.archive = 0 and c.archive = 0 "
+				+ "GROUP BY codeanimal,nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage, CAST(antecedents AS varchar(max)),a.archive,"
+				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email, CAST(remarque AS varchar(max)),c.archive";
+		List<Animal> animaux = new LinkedList<>();
+
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sql);
+			while (resultSet.next()) {
+				animaux.add(getAnimalFromResultset(resultSet));
+			}
+			return animaux;
+		} catch (SQLException e) {
+			throw new DALException("Erreur à la récupération de tous les animaux", e);
+		}
+	}
+
+	@Override
+	public List<Animal> selectByClient(Client client) throws DALException {
 		openConnection();
 
 		String sql = "SELECT codeanimal,nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage, CAST(antecedents AS varchar(max)) as antecedents,a.archive,"
@@ -116,7 +138,7 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 				+ "FROM Animaux a INNER JOIN Clients c ON a.codeclient = c.codeclient where a.codeclient=? and a.archive = 0 and c.archive = 0 "
 				+ "GROUP BY codeanimal,nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage, CAST(antecedents AS varchar(max)),a.archive,"
 				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email, CAST(remarque AS varchar(max)),c.archive";
-		
+
 		List<Animal> animaux = new LinkedList<>();
 
 		try {
@@ -130,46 +152,6 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 		} catch (SQLException e) {
 			throw new DALException("Erreur à la récupération de tous les animaux d'un client", e);
 		}
-	}
-
-	@Override
-	public List<Animal> selectByRole(String role) throws DALException {
-
-		return null;
-	}
-
-	@Override
-	public List<Animal> selectListByNom(String saisie) throws DALException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Animal selectByNom(String nom) throws DALException {
-		openConnection();
-
-		String sql = "SELECT codeanimal,nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage, CAST(antecedents AS varchar(max)) as antecedents,a.archive,"
-				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email, CAST(remarque AS varchar(max)) as remarque,c.archive "
-				+ "FROM Animaux a INNER JOIN Clients c ON a.codeclient = c.codeclient where nomanimal=? and a.archive = 0 and c.archive = 0 "
-				+ "GROUP BY codeanimal,nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage, CAST(antecedents AS varchar(max)),a.archive,"
-				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email, CAST(remarque AS varchar(max)),c.archive";
-
-		try {
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setString(1, nom);
-			ResultSet resultSet = statement.executeQuery();
-			if (resultSet.next())
-				return getAnimalFromResultset(resultSet);
-			return null;
-		} catch (SQLException e) {
-			throw new DALException("Erreur à la récupération d'un animal : " + nom, e);
-		}
-	}
-
-	@Override
-	public List<Animal> selectByDate(Date date) throws DALException {
-
-		return null;
 	}
 
 	@Override
@@ -197,7 +179,7 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 
 		openConnection();
 
-		String sql = "SELECT espece FROM Races";
+		String sql = "SELECT DISTINCT espece FROM Races";
 		List<String> especes = new LinkedList<>();
 
 		try {
@@ -211,6 +193,32 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 			throw new DALException("Erreur à la récupération de toutes les especes", e);
 		}
 	}
+
+
+
+	@Override
+	public Animal selectByNom(String nom) throws DALException {
+		openConnection();
+
+		String sql = "SELECT codeanimal,nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage, CAST(antecedents AS varchar(max)) as antecedents,a.archive,"
+				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email, CAST(remarque AS varchar(max)) as remarque,c.archive "
+				+ "FROM Animaux a INNER JOIN Clients c ON a.codeclient = c.codeclient where nomanimal=? and a.archive = 0 and c.archive = 0 "
+				+ "GROUP BY codeanimal,nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage, CAST(antecedents AS varchar(max)),a.archive,"
+				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email, CAST(remarque AS varchar(max)),c.archive";
+
+		try {
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, nom);
+			ResultSet resultSet = statement.executeQuery();
+			if (resultSet.next())
+				return getAnimalFromResultset(resultSet);
+			return null;
+		} catch (SQLException e) {
+			throw new DALException("Erreur à la récupération d'un animal : " + nom, e);
+		}
+	}
+
+	
 
 	private void openConnection() throws DALException {
 		try {
@@ -260,31 +268,8 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 	}
 
 	@Override
-	public List<Animal> selectAll() throws DALException {
-		openConnection();
-
-		String sql = "SELECT codeanimal,nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage, CAST(antecedents AS varchar(max)) as antecedents,a.archive,"
-				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email, CAST(remarque AS varchar(max)) as remarque,c.archive "
-				+ "FROM Animaux a INNER JOIN Clients c ON a.codeclient = c.codeclient where a.archive = 0 and c.archive = 0 "
-				+ "GROUP BY codeanimal,nomanimal,sexe,couleur,race,espece,a.codeclient,tatouage, CAST(antecedents AS varchar(max)),a.archive,"
-				+ "nomclient,prenomclient,adresse1,adresse2,codepostal,ville,numtel,assurance,email, CAST(remarque AS varchar(max)),c.archive";
-		List<Animal> animaux = new LinkedList<>();
-
-		try {
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sql);
-			while (resultSet.next()) {
-				animaux.add(getAnimalFromResultset(resultSet));
-			}
-			return animaux;
-		} catch (SQLException e) {
-			throw new DALException("Erreur à la récupération de tous les animaux", e);
-		}
-	}
-
-	@Override
 	public List<Animal> selectAnimaux(Client client) throws DALException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -296,13 +281,13 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 
 	@Override
 	public ArrayList<Client> selectAllWithAnimals() throws DALException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<Rdv> selectAgendaVet(String nom, Date date) throws DALException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -313,8 +298,24 @@ public class AnimalDAOJdbcImpl implements DAO<Animal> {
 
 	@Override
 	public Client selectClientWithAnimals(int id) throws DALException {
-		// TODO Auto-generated method stub
+		
+		return null;
+	}
+	
+	@Override
+	public List<Animal> selectByDate(Date date) throws DALException {
+
 		return null;
 	}
 
+	@Override
+	public List<Animal> selectByRole(String role) throws DALException {
+
+		return null;
+	}
+
+	@Override
+	public List<Animal> selectListByNom(String saisie) throws DALException {
+		return null;
+	}
 }

@@ -2,12 +2,10 @@ package fr.eni.aniforme.ihm;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -268,16 +266,22 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 		}
 		return panelGestionPersonnel;
 	}
+	
+	public DialogConnexion getDialogConnexion()
+	{
+		if (dialogConnexion == null) {
+			dialogConnexion = new DialogConnexion(EcranAccueil.this);
+			dialogConnexion.setVisible(true);
+		}
+		return dialogConnexion;
+	}
 
 	private void openDialogConnexion() {
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				if (dialogConnexion == null) {
-					dialogConnexion = new DialogConnexion(EcranAccueil.this);
-					dialogConnexion.setVisible(true);
-				}
+				getDialogConnexion();
 			}
 		});
 
@@ -291,8 +295,9 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 
 			if (employe != null && dialogConnexion != null) {
 
-				dialogConnexion.setVisible(false);
-				this.setEnabled(true);
+				setEnabled(true);
+				getDialogConnexion().setVisible(false);
+				
 
 				if (employe.getRole().equalsIgnoreCase("vet")) {
 					getContentPane().removeAll();

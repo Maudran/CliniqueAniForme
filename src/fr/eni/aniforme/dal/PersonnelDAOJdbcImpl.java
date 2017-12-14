@@ -211,23 +211,6 @@ public class PersonnelDAOJdbcImpl implements DAO<Personnel> {
 		}
 	}
 
-	@Override
-	public List<Personnel> selectByDate(Date date) throws DALException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<String> selectRaces() throws DALException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<String> selectEspeces() throws DALException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	private void openConnection() throws DALException {
 		try {
@@ -268,37 +251,46 @@ public class PersonnelDAOJdbcImpl implements DAO<Personnel> {
 
 	@Override
 	public List<Animal> selectAnimaux(Client client) throws DALException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void delete(Rdv rdv) throws DALException {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public ArrayList<Client> selectAllWithAnimals() throws DALException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Rdv> selectAgendaVet(String nom, Date date) throws DALException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Animal> selectByClient(Client client) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Client selectClientWithAnimals(int id) throws DALException {
-		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public List<Personnel> selectByDate(Date date) throws DALException {
+		return null;
+	}
+
+	@Override
+	public List<String> selectRaces() throws DALException {
+		return null;
+	}
+
+	@Override
+	public List<String> selectEspeces() throws DALException {
 		return null;
 	}
 

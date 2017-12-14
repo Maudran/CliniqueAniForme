@@ -24,6 +24,7 @@ public class TableEmployesModel extends AbstractTableModel {
 	public void updateData() {
 		try {
 			employes = personnelManager.getEmployes();
+			fireTableDataChanged();
 		} catch (BLLException e) {
 			e.printStackTrace();
 		}

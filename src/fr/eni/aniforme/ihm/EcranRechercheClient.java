@@ -6,14 +6,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
-import fr.eni.aniforme.bo.Client;
 
 public class EcranRechercheClient extends JFrame {
 	
@@ -50,7 +49,9 @@ public class EcranRechercheClient extends JFrame {
 
 	public JButton getBtnRechercher() {
 		if (btnRechercher == null) {
-			btnRechercher = new JButton("Rechercher");
+			btnRechercher = new JButton(new ImageIcon("ic_search_black_24dp/web/ic_search_black_24dp_1x.png"));
+			btnRechercher.setContentAreaFilled(false);
+			btnRechercher.setToolTipText("Rechercher");
 			btnRechercher.addActionListener(new ActionListener() {
 				
 				@Override

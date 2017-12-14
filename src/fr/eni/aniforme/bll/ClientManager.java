@@ -1,5 +1,6 @@
 package fr.eni.aniforme.bll;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.aniforme.bo.Client;
@@ -11,6 +12,7 @@ public class ClientManager {
 
 	private static ClientManager instance;
 	private DAO<Client> clientDAO;
+	AnimalManager animalManager = AnimalManager.getInstance();
 
 	private ClientManager() {
 		clientDAO = DAOFactory.getClientDAO();
@@ -84,8 +86,21 @@ public class ClientManager {
 	
 	public List<Client> getClientsWithAnimals() throws BLLException
 	{
+		List<Client> clients;
+		List<Client> clientsSansAnimaux = new ArrayList<Client>();
 		try {
-			return clientDAO.selectAllWithAnimals();
+			clients = clientDAO.selectAll();
+			
+			for (Client client : clients) {
+				if (animalManager.getAnimauxClient(client) == null) {
+					clientsSansAnimaux.add(client);
+				}
+			}
+			
+			clients = clientDAO.selectAllWithAnimals();
+			clients.addAll(clientsSansAnimaux);
+			
+			return clients;
 		} catch (DALException e) {
 			throw new BLLException("Erreur à la récupération des client et leurs animaux", e);
 		}
