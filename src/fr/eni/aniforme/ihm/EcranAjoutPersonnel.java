@@ -109,15 +109,15 @@ public class EcranAjoutPersonnel extends JFrame {
 
 	public JButton getBtnEnregistrer() {
 		if (btnEnregistrer == null) {
-			btnEnregistrer = new JButton(new ImageIcon("ic_save_black_24dp/web/ic_save_black_24dp_1x.png"));
+			btnEnregistrer = new JButton(new ImageIcon("ic_done_black_24dp/web/ic_done_black_24dp_1x.png"));
 			btnEnregistrer.setContentAreaFilled(false);
-			btnEnregistrer.setToolTipText("Enregistrer");
+			btnEnregistrer.setToolTipText("Valider");
 			btnEnregistrer.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					if (!checkEmploye(getEmployeFromChamps())) {
+					if (checkEmploye(getEmployeFromChamps())) {
 						try {
 							personnelManager.insertPersonnel(getEmployeFromChamps());
 							listener.refreshTable();

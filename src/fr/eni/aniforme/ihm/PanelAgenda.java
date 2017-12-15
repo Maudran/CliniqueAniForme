@@ -199,15 +199,15 @@ public class PanelAgenda extends JPanel {
 	}
 
 	public EcranDossierMedical getEcranDossierMedical() {
-		if (ecranDossierMedical == null) {
-			try {
-				ecranDossierMedical = new EcranDossierMedical(animalManager
-						.getAnimalById(getModel().getValueAt(getTableau().getSelectedRow()).getCodeAnimal()));
-			} catch (BLLException e) {
-				e.printStackTrace();
-			}
+
+		try {
+			ecranDossierMedical = new EcranDossierMedical(
+					animalManager.getAnimalById(getModel().getValueAt(getTableau().getSelectedRow()).getCodeAnimal()));
+		} catch (BLLException e) {
+			e.printStackTrace();
 		}
 		return ecranDossierMedical;
+
 	}
 
 }

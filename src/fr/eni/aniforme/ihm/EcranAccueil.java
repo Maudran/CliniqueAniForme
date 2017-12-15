@@ -138,8 +138,7 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 					getContentPane().removeAll();
 					getContentPane().revalidate();
 					repaint();
-					DialogConnexion dialogConnexion = new DialogConnexion(EcranAccueil.this);
-					dialogConnexion.setVisible(true);
+					getDialogConnexion().setVisible(true);
 
 				}
 			});
@@ -171,6 +170,7 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 					getContentPane().removeAll();
 					getContentPane().add(getPanelPriseRDV());
 					getContentPane().revalidate();
+					repaint();
 				}
 			});
 		}
@@ -188,6 +188,7 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 					getContentPane().removeAll();
 					getContentPane().add(getPanelClients());
 					getContentPane().revalidate();
+					repaint();
 				}
 			});
 		}
@@ -296,6 +297,8 @@ public class EcranAccueil extends JFrame implements ConnexionListener {
 			if (employe != null && dialogConnexion != null) {
 
 				setEnabled(true);
+				getDialogConnexion().getTextNom().setText("");
+				getDialogConnexion().getTextMotPasse().setText("");
 				getDialogConnexion().setVisible(false);
 				
 

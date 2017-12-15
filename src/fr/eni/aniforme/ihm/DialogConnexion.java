@@ -1,6 +1,7 @@
 package fr.eni.aniforme.ihm;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -15,33 +16,32 @@ public class DialogConnexion extends JDialog {
 	private JPasswordField textMotPasse;
 	private JLabel labelNom, labelMotPasse;
 	private JButton btnValider, btnQuitter;
-	
-	public interface ConnexionListener 
-	{
+
+	public interface ConnexionListener {
 		void checkConnexion(String nom, String motPasse);
+
 		void deconnexion();
 	}
-	
+
 	private ConnexionListener listener;
 
 	public DialogConnexion(ConnexionListener listener) {
-		
+
 		this.listener = listener;
 		listener.deconnexion();
-		
+
 		setTitle("Connexion");
 		setBounds(100, 100, 289, 184);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 
-		
 		getContentPane().add(getLabelNom());
 		getContentPane().add(getLabelMotPasse());
 
 		getContentPane().add(getTextNom());
 		getContentPane().add(getTextMotPasse());
-		
+
 		getContentPane().add(getBtnValider());
 		getContentPane().add(getBtnQuitter());
 	}
@@ -86,9 +86,15 @@ public class DialogConnexion extends JDialog {
 			btnValider.setBounds(20, 111, 89, 23);
 			btnValider.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String password = new String(getTextMotPasse().getPassword());
-					
-					listener.checkConnexion(getTextNom().getText(), password);
+					if (checkConnexion()) {
+						String password = new String(getTextMotPasse().getPassword());
+
+						listener.checkConnexion(getTextNom().getText(), password);
+
+					} else {
+						JOptionPane.showMessageDialog(DialogConnexion.this, "Nom et mot de passe obligatoires");
+
+					}
 				}
 			});
 		}
@@ -100,7 +106,7 @@ public class DialogConnexion extends JDialog {
 			btnQuitter = new JButton("Quitter");
 			btnQuitter.setBounds(153, 111, 89, 23);
 			btnQuitter.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					System.exit(0);
@@ -110,5 +116,15 @@ public class DialogConnexion extends JDialog {
 		return btnQuitter;
 	}
 
+	public boolean checkConnexion() {
+		if (isNullOrEmpty(getTextNom().getText()) || isNullOrEmpty(new String(getTextMotPasse().getPassword()))) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean isNullOrEmpty(String string) {
+		return string == null || string.trim().isEmpty();
+	}
 
 }
